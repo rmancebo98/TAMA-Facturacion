@@ -1,6 +1,4 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
-import documentGenerator.word;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import util.date;
 import util.ncf;
 
@@ -10,23 +8,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
 public class core extends JFrame implements ActionListener {
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 2L;
 
-    private JTextField clientTxt;
-    private JButton generateButtom;
-    private JTextField moneyField;
-    private JTextField RNCTxt;
-    private JTextField NCFTxt;
-    private JTextField dateTxt;
-    private JButton addButton;
-
+    JTextField clientTxt;
+    JButton generateButtom;
+    JTextField clientRNC;
+    JTextField moneyField;
+    JTextField RNCTxt;
+    JTextField NCFTxt;
+    JTextField dateTxt;
+    JButton addButton;
 
     public core() {
-        super("Tavarez y Mancebo - Sistema de Facturación");
+        super("Tavarez y Mancebo - Sistema de facturación");
+        createReceipWindow();
+    }
+
+    public void createReceipWindow() {
 
         // Create the GUI components
         JPanel panel = new JPanel();
@@ -37,16 +41,30 @@ public class core extends JFrame implements ActionListener {
         panel.add(dateTxt);
 
         panel.add(new JLabel("RNC"));
-        RNCTxt = new JTextField("131731651",11);
+        RNCTxt = new JTextField("131731651", 11);
         panel.add(RNCTxt);
 
         panel.add(new JLabel("Numero de comprobante fiscal"));
-        NCFTxt = new JTextField(String.valueOf(ncf.getLastNCF()),11);
+        NCFTxt = new JTextField(String.valueOf(ncf.getLastNCF()), 11);
         panel.add(NCFTxt);
 
-        panel.add(new JLabel("Cliente:"));
-        clientTxt = new JTextField(25);
-        panel.add(clientTxt);
+        // Add the clients dropdown
+        panel.add(new JLabel("Clientes:"));
+        String[] options = clients.getAllKeysFromJson().toArray(new String[0]);
+        JComboBox<String> clientsDropDown = new JComboBox<>(options);
+        panel.add(clientsDropDown);
+
+        panel.add(new JLabel("RNC del cliente:"));
+        clientRNC = new JTextField(clients.getClientRNC(clientsDropDown.getSelectedItem().toString()), 12);
+        panel.add(clientRNC);
+
+        // Add an event listener to the clientsDropDown object
+        clientsDropDown.addActionListener(e -> {
+            //Update RNC based on selection of clientsDropDown
+            clientRNC.setText(clients.getClientRNC(clientsDropDown.getSelectedItem().toString()));
+            // Update the dropdown with the updated options array
+            clientsDropDown.setModel(new DefaultComboBoxModel<>(clients.getAllKeysFromJson().toArray(new String[0])));
+        });
 
         panel.add(new JLabel("Monto a facturar:"));
         moneyField = new JTextField(7);
@@ -57,14 +75,13 @@ public class core extends JFrame implements ActionListener {
         panel.add(generateButtom);
 
 
-
-        addButton = new JButton("Add");
+        addButton = new JButton("Agregar cliente");
         addButton.addActionListener(e -> {
             // Show the new window when the button is clicked
-            addClient.showFrame();
+            clients.showFrame();
         });
-        panel.add(addButton);
 
+        panel.add(addButton);
 
         // Add the panel to the frame and display the GUI
         add(panel);
@@ -94,19 +111,12 @@ public class core extends JFrame implements ActionListener {
         // Get the string entered in the text field
 
         // Add the string to the map
-        data.put("fecha", dateTxt.getText());
+        data.put("Fecha", dateTxt.getText());
         data.put("Monto", moneyField.getText());
         data.put("RNC", RNCTxt.getText());
         data.put("Numero de Comprobante Fiscal", NCFTxt.getText());
         data.put("Cliente", clientTxt.getText());
 
-        // Write the modified map back to the JSON file
-        try {
-            mapper.writeValue(new File("src/main/java/facturas/data.json"), data);
-            System.out.println("Data written to data.json");
-            word.writeOnWord();
-        } catch (IOException | InvalidFormatException ex) {
-            ex.printStackTrace();
-        }
+        jsonHandler.writeOnJson(data);
     }
 }
