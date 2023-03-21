@@ -6,14 +6,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 public class clients {
 
     private static JFrame addFrame;
-    private static JFrame deleteFrame;
     private static final String clientsPath = "src/main/java/clients/clients.json";
+    static JComboBox<String> clientsDropDown;
 
     public static void createClientWindow() {
         addFrame = new JFrame("Agregar cliente");
@@ -33,44 +32,33 @@ public class clients {
 
         addClient.addActionListener(e -> {
             addValuesOnJson(nameTxt.getText(), rncTxt.getText());
+            updateClientsDropDown();
         });
 
-        deleteClient = new JButton("Ir a eliminar cliente");
-        deleteClient.addActionListener(e -> showAddClientFrame());
+        addPanel.add(new JLabel("Clientes:"));
+        String[] options = clients.getAllKeysFromJson().toArray(new String[0]);
+        clientsDropDown = new JComboBox<>(options);
+
+
+        deleteClient = new JButton("Eliminar cliente");
+        deleteClient.setBackground(Color.RED);
+
+        deleteClient.addActionListener(e -> {
+            deleteValuesOnJson(clientsDropDown.getSelectedItem().toString());
+            updateClientsDropDown();
+        });
 
         addPanel.add(addClient);
+        addPanel.add(clientsDropDown);
         addPanel.add(deleteClient);
         addFrame.add(addPanel);
-        addFrame.setPreferredSize(new Dimension(300, 175));
+        addFrame.setPreferredSize(new Dimension(300, 300));
         addFrame.pack();
         addFrame.setLocationRelativeTo(null);
     }
 
-    public static void createDeleteClientWindow() {
-        deleteFrame = new JFrame("Eliminar cliente");
-        JPanel deletePanel = new JPanel();
-        JButton deleteClient;
-
-        deleteFrame.add(new JLabel("Clientes:"));
-        String[] options = clients.getAllKeysFromJson().toArray(new String[0]);
-        JComboBox<String> clientsDropDown = new JComboBox<>(options);
-
-        deleteClient = new JButton("Eliminar cliente");
-
-//        deleteClient.addActionListener(e -> addValuesOnJson(nameTxt.getText(), rncTxt.getText()));
-        //TODO: show the clients in a dropdown list and add an action listener to delete the delected one from clients.json
-        deletePanel.add(clientsDropDown);
-        deletePanel.add(deleteClient);
-
-        deleteFrame.add(deletePanel);
-        deleteFrame.setPreferredSize(new Dimension(300, 175));
-        deleteFrame.pack();
-        deleteFrame.setLocationRelativeTo(null);
-    }
-
-    public static void showAddClientFrame() {
-        createDeleteClientWindow();
-        deleteFrame.setVisible(true);
+    public static void updateClientsDropDown(){
+        clientsDropDown.setModel(new DefaultComboBoxModel<>(clients.getAllKeysFromJson().toArray(new String[0])));
     }
 
     public static void showFrame() {
@@ -100,33 +88,52 @@ public class clients {
 
         // Add the string to the map
         clientData.put(client, RNC);
-
         // Write the modified map back to the JSON file
         try {
-            mapper.writeValue(new File(clientsPath), clientData);
-            System.out.println("Data written to clients.json");
-
             if (checkIfClientExist(client)) {
                 notifications.showPopUpNotification("El cliente ya existe, actualizando RNC", "Actualizando cliente");
             } else {
                 notifications.showPopUpNotification("Cliente añadido", "Operación exitosa");
             }
+            mapper.writeValue(new File(clientsPath), clientData);
+            System.out.println("Client " + client + " added to clients.json");
         } catch (IOException ex) {
             ex.printStackTrace();
             notifications.showErrorNotification("Error añadiendo cliente");
         }
+
     }
 
     public static void deleteValuesOnJson(String client) {
-        // Read the JSON file into a map
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, String> clientData = readClientsJson();
+        ImageIcon icon = new ImageIcon("src/main/resources/icons/alert.png");
+        int result =
+                JOptionPane.showConfirmDialog(null, "Esta seguro que desea borrar el cliente " + client + "?", "Borrar cliente", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, icon);
 
-        client = client.toUpperCase();
+        if (result == JOptionPane.OK_OPTION) {
+            // Read the JSON file into a map
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, String> clientData = readClientsJson();
+
+            client = client.toUpperCase();
+
+            // Add the string to the map
+            clientData.remove(client);
+
+            // Write the modified map back to the JSON file
+            try {
+                mapper.writeValue(new File(clientsPath), clientData);
+                System.out.println("Client " + client + " deleted from clients.json");
+                notifications.showPopUpNotification("Cliente " + client + " eliminado", "Cliente eliminado");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                notifications.showErrorNotification("Error eliminando cliente");
+            }
+        }
     }
 
     public static boolean checkIfClientExist(String client) {
-        return readClientsJson().get(client) != null && !Objects.equals(readClientsJson().get(client), "");
+        String clientFromJson = readClientsJson().get(client);
+        return clientFromJson != null && clientFromJson != "" && !clientFromJson.isEmpty();
     }
 
     public static Set<String> getAllKeysFromJson() {

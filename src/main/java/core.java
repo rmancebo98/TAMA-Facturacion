@@ -16,7 +16,7 @@ public class core extends JFrame implements ActionListener {
     @Serial
     private static final long serialVersionUID = 2L;
 
-    JTextField clientTxt;
+    JComboBox<String> clientsDropDown;
     JButton generateButtom;
     JTextField clientRNC;
     JTextField moneyField;
@@ -51,12 +51,8 @@ public class core extends JFrame implements ActionListener {
         // Add the clients dropdown
         panel.add(new JLabel("Clientes:"));
         String[] options = clients.getAllKeysFromJson().toArray(new String[0]);
-        JComboBox<String> clientsDropDown = new JComboBox<>(options);
+        clientsDropDown = new JComboBox<>(options);
         panel.add(clientsDropDown);
-
-        panel.add(new JLabel("RNC del cliente:"));
-        clientRNC = new JTextField(clients.getClientRNC(clientsDropDown.getSelectedItem().toString()), 12);
-        panel.add(clientRNC);
 
         // Add an event listener to the clientsDropDown object
         clientsDropDown.addActionListener(e -> {
@@ -65,6 +61,10 @@ public class core extends JFrame implements ActionListener {
             // Update the dropdown with the updated options array
             clientsDropDown.setModel(new DefaultComboBoxModel<>(clients.getAllKeysFromJson().toArray(new String[0])));
         });
+
+        panel.add(new JLabel("RNC del cliente:"));
+        clientRNC = new JTextField(clients.getClientRNC(clientsDropDown.getSelectedItem().toString()), 12);
+        panel.add(clientRNC);
 
         panel.add(new JLabel("Monto a facturar:"));
         moneyField = new JTextField(7);
@@ -75,7 +75,7 @@ public class core extends JFrame implements ActionListener {
         panel.add(generateButtom);
 
 
-        addButton = new JButton("Agregar cliente");
+        addButton = new JButton("Agregar o eliminar cliente");
         addButton.addActionListener(e -> {
             // Show the new window when the button is clicked
             clients.showFrame();
@@ -115,7 +115,7 @@ public class core extends JFrame implements ActionListener {
         data.put("Monto", moneyField.getText());
         data.put("RNC", RNCTxt.getText());
         data.put("Numero de Comprobante Fiscal", NCFTxt.getText());
-        data.put("Cliente", clientTxt.getText());
+        data.put("Cliente", clientsDropDown.getSelectedItem().toString());
 
         jsonHandler.writeOnJson(data);
     }

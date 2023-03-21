@@ -10,4 +10,5 @@ public class notifications {
     public static void showErrorNotification(String message){
         JOptionPane.showMessageDialog(null, message, "Ocurrió un error", JOptionPane.ERROR_MESSAGE);
     }
+
 }
