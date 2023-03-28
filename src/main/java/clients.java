@@ -14,7 +14,7 @@ public class clients {
     private static final String clientsPath = "src/main/java/clients/clients.json";
     static JComboBox<String> clientsDropDown;
 
-    public static void createClientWindow() {
+    private static void createClientWindow() {
         addFrame = new JFrame("Agregar cliente");
         JPanel addPanel = new JPanel();
         JButton addClient;
@@ -57,16 +57,16 @@ public class clients {
         addFrame.setLocationRelativeTo(null);
     }
 
-    public static void updateClientsDropDown(){
-        clientsDropDown.setModel(new DefaultComboBoxModel<>(clients.getAllKeysFromJson().toArray(new String[0])));
+    private static void updateClientsDropDown(){
+        clientsDropDown.setModel(new DefaultComboBoxModel<>(getAllKeysFromJson().toArray(new String[0])));
     }
 
-    public static void showFrame() {
+    public static void showClientsFrame() {
         createClientWindow();
         addFrame.setVisible(true);
     }
 
-    public static Map<String, String> readClientsJson() {
+    private static Map<String, String> readClientsJson() {
         ObjectMapper mapper = new ObjectMapper();
         Map data = null;
 
@@ -79,7 +79,7 @@ public class clients {
         return data;
     }
 
-    public static void addValuesOnJson(String client, String RNC) {
+    private static void addValuesOnJson(String client, String RNC) {
         // Read the JSON file into a map
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> clientData = readClientsJson();
@@ -104,7 +104,7 @@ public class clients {
 
     }
 
-    public static void deleteValuesOnJson(String client) {
+    private static void deleteValuesOnJson(String client) {
         ImageIcon icon = new ImageIcon("src/main/resources/icons/alert.png");
         int result =
                 JOptionPane.showConfirmDialog(null, "Esta seguro que desea borrar el cliente " + client + "?", "Borrar cliente", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, icon);
@@ -123,7 +123,7 @@ public class clients {
             try {
                 mapper.writeValue(new File(clientsPath), clientData);
                 System.out.println("Client " + client + " deleted from clients.json");
-                notifications.showPopUpNotification("Cliente " + client + " eliminado", "Cliente eliminado");
+                notifications.showPopUpNotification("Cliente " + client + " eliminado", "Operación Exitosa");
             } catch (IOException ex) {
                 ex.printStackTrace();
                 notifications.showErrorNotification("Error eliminando cliente");
@@ -131,7 +131,7 @@ public class clients {
         }
     }
 
-    public static boolean checkIfClientExist(String client) {
+    private static boolean checkIfClientExist(String client) {
         String clientFromJson = readClientsJson().get(client);
         return clientFromJson != null && clientFromJson != "" && !clientFromJson.isEmpty();
     }

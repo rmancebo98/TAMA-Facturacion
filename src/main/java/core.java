@@ -23,7 +23,8 @@ public class core extends JFrame implements ActionListener {
     JTextField RNCTxt;
     JTextField NCFTxt;
     JTextField dateTxt;
-    JButton addButton;
+    JButton addClientButton;
+    JButton addFeeButton;
 
     public core() {
         super("Tavarez y Mancebo - Sistema de facturación");
@@ -75,13 +76,20 @@ public class core extends JFrame implements ActionListener {
         panel.add(generateButtom);
 
 
-        addButton = new JButton("Agregar o eliminar cliente");
-        addButton.addActionListener(e -> {
+        addClientButton = new JButton("Agregar o eliminar cliente");
+        addClientButton.addActionListener(e -> {
             // Show the new window when the button is clicked
-            clients.showFrame();
+            clients.showClientsFrame();
+        });
+        panel.add(addClientButton);
+
+        addFeeButton = new JButton("Agregar o eliminar honorario");
+        addFeeButton.addActionListener(e -> {
+            // Show the new window when the button is clicked
+            fees.showFeesFrame();
         });
 
-        panel.add(addButton);
+        panel.add(addFeeButton);
 
         // Add the panel to the frame and display the GUI
         add(panel);
