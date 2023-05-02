@@ -27,12 +27,14 @@ public class clients {
         addPanel.add(new JLabel("RNC:"));
         JTextField rncTxt = new JTextField(25);
         addPanel.add(rncTxt);
+        formatter.setNumericOnly(rncTxt);
 
         addClient = new JButton("Crear cliente");
 
         addClient.addActionListener(e -> {
             addValuesOnJson(nameTxt.getText(), rncTxt.getText());
             updateClientsDropDown();
+            core.updateClientsDropdown();
         });
 
         addPanel.add(new JLabel("Clientes:"));
@@ -46,6 +48,7 @@ public class clients {
         deleteClient.addActionListener(e -> {
             deleteValuesOnJson(clientsDropDown.getSelectedItem().toString());
             updateClientsDropDown();
+            core.updateClientsDropdown();
         });
 
         addPanel.add(addClient);
@@ -57,7 +60,7 @@ public class clients {
         addFrame.setLocationRelativeTo(null);
     }
 
-    public static void updateClientsDropDown(){
+    public static void updateClientsDropDown() {
         clientsDropDown.setModel(new DefaultComboBoxModel<>(clients.getAllKeysFromJson().toArray(new String[0])));
     }
 
