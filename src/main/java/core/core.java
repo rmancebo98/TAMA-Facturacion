@@ -1,5 +1,11 @@
+package core;
+
+import clients.clients;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import documentGenerator.jsonHandler;
+import fees.fees;
 import util.date;
+import util.formatter;
 import util.ncf;
 
 import javax.swing.*;
@@ -19,12 +25,16 @@ public class core extends JFrame implements ActionListener {
     static JComboBox<String> clientsDropDown;
     JButton generateButtom;
     JTextField clientRNC;
-    JComboBox<String> firstFeeComboBox;
-    JTextField firstFeeTxt;
-    JComboBox<String> secondFeeComboBox;
-    JTextField secondFeeTxt;
-    JComboBox<String> thirdFeeComboBox;
-    JTextField thirdFeeTxt;
+    public static JComboBox<String> firstFeeComboBox;
+    public static JTextField firstFeeTxt;
+    public static JComboBox<String> secondFeeComboBox;
+    public static JTextField secondFeeTxt;
+    public static JComboBox<String> thirdFeeComboBox;
+    public static JTextField thirdFeeTxt;
+    public static JComboBox<String> forthFeeComboBox;
+    public static JTextField forthFeeTxt;
+    public static JComboBox<String> fifthFeeComboBox;
+    public static JTextField fifthFeeTxt;
     JTextField RNCTxt;
     JTextField NCFTxt;
     JTextField dateTxt;
@@ -33,11 +43,11 @@ public class core extends JFrame implements ActionListener {
 
     public core() {
         super("Tavarez y Mancebo - Sistema de facturación");
-        createReceipWindow();
+        createReceiptWindow();
     }
 
 
-    public void createReceipWindow() {
+    public void createReceiptWindow() {
 
         // Create the GUI components
         JPanel panel = new JPanel();
@@ -57,7 +67,7 @@ public class core extends JFrame implements ActionListener {
         panel.add(NCFTxt);
         formatter.setNumericOnly(NCFTxt);
 
-        // Add the clients dropdown
+        // Add the clients.clients dropdown
         panel.add(new JLabel("Clientes:"));
         String[] options = clients.getAllKeysFromJson().toArray(new String[0]);
         clientsDropDown = new JComboBox<>(options);
@@ -79,31 +89,38 @@ public class core extends JFrame implements ActionListener {
 
         panel.add(new JLabel("Conceptos a facturar:"));
         firstFeeComboBox = new JComboBox<>(fees.getAllKeysFromJson().toArray(new String[0]));
+        firstFeeComboBox.setEditable(true);
         panel.add(firstFeeComboBox);
-        firstFeeTxt = fillFeeValue(firstFeeComboBox);
+        firstFeeTxt = fees.fillFeeValueInCore(firstFeeComboBox);
         panel.add(firstFeeTxt);
-        firstFeeComboBox.addActionListener(e -> {
-            //Update RNC based on selection of clientsDropDown
-            firstFeeTxt.setText(fees.getFeeAmount(firstFeeComboBox.getSelectedItem().toString()));
-        });
 
         secondFeeComboBox = new JComboBox<>(fees.getAllKeysFromJson().toArray(new String[0]));
+        secondFeeComboBox.setSelectedIndex(-1);
+        secondFeeComboBox.setEditable(true);
         panel.add(secondFeeComboBox);
-        secondFeeTxt = fillFeeValue(secondFeeComboBox);
+        secondFeeTxt = fees.fillFeeValueInCore(secondFeeComboBox);
         panel.add(secondFeeTxt);
-        secondFeeComboBox.addActionListener(e -> {
-            //Update RNC based on selection of clientsDropDown
-            secondFeeTxt.setText(fees.getFeeAmount(secondFeeComboBox.getSelectedItem().toString()));
-        });
 
         thirdFeeComboBox = new JComboBox<>(fees.getAllKeysFromJson().toArray(new String[0]));
+        thirdFeeComboBox.setSelectedIndex(-1);
+        thirdFeeComboBox.setEditable(true);
         panel.add(thirdFeeComboBox);
-        thirdFeeTxt = fillFeeValue(thirdFeeComboBox);
+        thirdFeeTxt = fees.fillFeeValueInCore(thirdFeeComboBox);
         panel.add(thirdFeeTxt);
-        thirdFeeComboBox.addActionListener(e -> {
-            //Update RNC based on selection of clientsDropDown
-            thirdFeeTxt.setText(fees.getFeeAmount(thirdFeeComboBox.getSelectedItem().toString()));
-        });
+
+        forthFeeComboBox = new JComboBox<>(fees.getAllKeysFromJson().toArray(new String[0]));
+        forthFeeComboBox.setSelectedIndex(-1);
+        forthFeeComboBox.setEditable(true);
+        panel.add(forthFeeComboBox);
+        forthFeeTxt = fees.fillFeeValueInCore(forthFeeComboBox);
+        panel.add(forthFeeTxt);
+
+        fifthFeeComboBox = new JComboBox<>(fees.getAllKeysFromJson().toArray(new String[0]));
+        fifthFeeComboBox.setSelectedIndex(-1);
+        panel.add(fifthFeeComboBox);
+        fifthFeeComboBox.setEditable(true);
+        fifthFeeTxt = fees.fillFeeValueInCore(fifthFeeComboBox);
+        panel.add(fifthFeeTxt);
 
         generateButtom = new JButton("Generar factura");
         generateButtom.addActionListener(this);
@@ -133,6 +150,8 @@ public class core extends JFrame implements ActionListener {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+        fees.formatFeesTxtInCore();
+        fees.fillFeesTxtInCore();
     }
 
     public static void main(String[] args) {
@@ -143,40 +162,27 @@ public class core extends JFrame implements ActionListener {
         clientsDropDown.setModel(new DefaultComboBoxModel<>(clients.getAllKeysFromJson().toArray(new String[0])));
     }
 
-    public static void updateFeesDropDown(){
-
-    }
-
-    public JTextField fillFeeValue(JComboBox<String> comboBox) {
-        JTextField txtField;
-        if (comboBox.getSelectedItem() == null) {
-            txtField = new JTextField("0", 12);
-        } else {
-            txtField = new JTextField(fees.getFeeAmount(comboBox.getSelectedItem().toString()), 12);
-        }
-
-        return txtField;
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         // Read the JSON file into a map
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> data = null;
         try {
-            data = mapper.readValue(new File("src/main/java/facturas/data.json"), Map.class);
+            data = mapper.readValue(new File("src/main/java/facturas/clientData.json"), Map.class);
         } catch (IOException ex) {
             // If the file doesn't exist, create a new empty map
             data = new HashMap<String, String>();
         }
 
-        // Add the string to the map
+        // Add the client data into the map
         data.put("Fecha", dateTxt.getText());
         data.put("RNC", RNCTxt.getText());
         data.put("Numero de Comprobante Fiscal", NCFTxt.getText());
         data.put("Cliente", clientsDropDown.getSelectedItem().toString());
         data.put("RNC del Cliente", clientRNC.getText());
-//        data.put("Monto", moneyField.getText());
+
+        //Add the fees.fees data into the map
+        data.put(firstFeeComboBox.getSelectedItem().toString(), firstFeeTxt.getText());
 
         jsonHandler.writeOnJson(data);
     }

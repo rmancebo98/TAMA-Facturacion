@@ -1,7 +1,15 @@
+package fees;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import util.format;
+import util.formatter;
+import util.notifications;
+import core.core;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -34,6 +42,7 @@ public class fees {
         addFee.addActionListener(e -> {
             addValuesOnJson(nameTxt.getText(), amountTxt.getText());
             updateFeesDropDown();
+            updateFeesDropDownInCore();
         });
 
         addPanel.add(new JLabel("Honorarios:"));
@@ -47,6 +56,7 @@ public class fees {
         deleteFee.addActionListener(e -> {
             deleteValuesOnJson(feesDropDown.getSelectedItem().toString());
             updateFeesDropDown();
+            updateFeesDropDownInCore();
         });
 
         addPanel.add(addFee);
@@ -85,7 +95,7 @@ public class fees {
         try {
             feeAmount = readFeesJson().get(fee);
         } catch (NullPointerException nE) {
-            feeAmount = "";
+            feeAmount = "$0";
         }
         return feeAmount;
     }
@@ -107,7 +117,7 @@ public class fees {
                 notifications.showPopUpNotification("Honorario añadido", "Operación exitosa");
             }
             mapper.writeValue(new File(feesPath), feeData);
-            System.out.println("Fee " + fee + " added to fees.json");
+            System.out.println("Fee " + fee + " added to fees.fees.json");
         } catch (IOException ex) {
             ex.printStackTrace();
             notifications.showErrorNotification("Error añadiendo honorario");
@@ -133,7 +143,7 @@ public class fees {
             // Write the modified map back to the JSON file
             try {
                 mapper.writeValue(new File(feesPath), feeData);
-                System.out.println("Fee " + fee + " deleted from fees.json");
+                System.out.println("Fee " + fee + " deleted from fees.fees.json");
                 notifications.showPopUpNotification("Honorario " + fee + " eliminado", "Honorario eliminado");
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -150,6 +160,81 @@ public class fees {
     public static Set<String> getAllKeysFromJson() {
         // Collect all keys into a set and return it
         return readFeesJson().keySet();
+    }
+
+    public static void formatFeesTxtInCore() {
+        core.firstFeeTxt.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                core.firstFeeTxt.setText(format.formatAsMoney(core.firstFeeTxt.getText()));
+            }
+        });
+        core.secondFeeTxt.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                core.secondFeeTxt.setText(format.formatAsMoney(core.secondFeeTxt.getText()));
+            }
+        });
+        core.thirdFeeTxt.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                core.thirdFeeTxt.setText(format.formatAsMoney(core.thirdFeeTxt.getText()));
+            }
+        });
+        core.forthFeeTxt.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                core.forthFeeTxt.setText(format.formatAsMoney(core.forthFeeTxt.getText()));
+            }
+        });
+        core.fifthFeeTxt.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                core.fifthFeeTxt.setText(format.formatAsMoney(core.fifthFeeTxt.getText()));
+            }
+        });
+    }
+
+    public static JTextField fillFeeValueInCore(JComboBox<String> comboBox) {
+        JTextField txtField;
+        if (comboBox.getSelectedItem() == null) {
+            txtField = new JTextField("$0.00", 12);
+        } else {
+            txtField = new JTextField(fees.getFeeAmount(comboBox.getSelectedItem().toString()), 12);
+        }
+
+        return txtField;
+    }
+
+    public static void fillFeesTxtInCore() {
+        core.firstFeeComboBox.addActionListener(e -> {
+            //Update fee value based on selection of feeComboBox
+            core.firstFeeTxt.setText(fees.getFeeAmount(core.firstFeeComboBox.getSelectedItem().toString()));
+        });
+        core.secondFeeComboBox.addActionListener(e -> {
+            //Update fee value based on selection of feeComboBox
+            core.secondFeeTxt.setText(fees.getFeeAmount(core.secondFeeComboBox.getSelectedItem().toString()));
+        });
+        core.thirdFeeComboBox.addActionListener(e -> {
+            //Update fee value based on selection of feeComboBox
+            core.thirdFeeTxt.setText(fees.getFeeAmount(core.thirdFeeComboBox.getSelectedItem().toString()));
+        });
+        core.forthFeeComboBox.addActionListener(e -> {
+            //Update fee value based on selection of feeComboBox
+            core.forthFeeTxt.setText(fees.getFeeAmount(core.forthFeeComboBox.getSelectedItem().toString()));
+        });
+        core.fifthFeeComboBox.addActionListener(e -> {
+            //Update fee value based on selection of feeComboBox
+            core.fifthFeeTxt.setText(fees.getFeeAmount(core.fifthFeeComboBox.getSelectedItem().toString()));
+        });
+    }
+
+    public static void updateFeesDropDownInCore() {
+        core.firstFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.secondFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.thirdFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.forthFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.fifthFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
     }
 
 }

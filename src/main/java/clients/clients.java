@@ -1,4 +1,9 @@
+package clients;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import util.formatter;
+import util.notifications;
+import core.core;
 
 import javax.swing.*;
 import java.awt.*;
@@ -99,7 +104,7 @@ public class clients {
                 notifications.showPopUpNotification("Cliente añadido", "Operación exitosa");
             }
             mapper.writeValue(new File(clientsPath), clientData);
-            System.out.println("Client " + client + " added to clients.json");
+            System.out.println("Client " + client + " added to clients.clients.json");
         } catch (IOException ex) {
             ex.printStackTrace();
             notifications.showErrorNotification("Error añadiendo cliente");
@@ -125,7 +130,7 @@ public class clients {
             // Write the modified map back to the JSON file
             try {
                 mapper.writeValue(new File(clientsPath), clientData);
-                System.out.println("Client " + client + " deleted from clients.json");
+                System.out.println("Client " + client + " deleted from clients.clients.json");
                 notifications.showPopUpNotification("Cliente " + client + " eliminado", "Cliente eliminado");
             } catch (IOException ex) {
                 ex.printStackTrace();
