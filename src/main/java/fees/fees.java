@@ -1,6 +1,7 @@
 package fees;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import util.date;
 import util.format;
 import util.formatter;
 import util.notifications;
@@ -209,32 +210,116 @@ public class fees {
     public static void fillFeesTxtInCore() {
         core.firstFeeComboBox.addActionListener(e -> {
             //Update fee value based on selection of feeComboBox
-            core.firstFeeTxt.setText(fees.getFeeAmount(core.firstFeeComboBox.getSelectedItem().toString()));
+            if (core.firstFeeComboBox.getSelectedItem() != null) {
+                core.firstFeeTxt.setText(fees.getFeeAmount(core.firstFeeComboBox.getSelectedItem().toString()));
+            } else if (core.firstFeeComboBox.getSelectedItem() == null) {
+                core.firstFeeTxt.setText("");
+            }
         });
         core.secondFeeComboBox.addActionListener(e -> {
             //Update fee value based on selection of feeComboBox
-            core.secondFeeTxt.setText(fees.getFeeAmount(core.secondFeeComboBox.getSelectedItem().toString()));
+            if (core.secondFeeComboBox.getSelectedItem() != null) {
+                core.secondFeeTxt.setText(fees.getFeeAmount(core.secondFeeComboBox.getSelectedItem().toString()));
+            } else if (core.secondFeeComboBox.getSelectedItem() == null) {
+                core.secondFeeTxt.setText("");
+            }
         });
         core.thirdFeeComboBox.addActionListener(e -> {
             //Update fee value based on selection of feeComboBox
-            core.thirdFeeTxt.setText(fees.getFeeAmount(core.thirdFeeComboBox.getSelectedItem().toString()));
+            if (core.thirdFeeComboBox.getSelectedItem() != null) {
+                core.thirdFeeTxt.setText(fees.getFeeAmount(core.thirdFeeComboBox.getSelectedItem().toString()));
+            } else if (core.thirdFeeComboBox.getSelectedItem() == null) {
+                core.thirdFeeTxt.setText("");
+            }
         });
         core.forthFeeComboBox.addActionListener(e -> {
             //Update fee value based on selection of feeComboBox
-            core.forthFeeTxt.setText(fees.getFeeAmount(core.forthFeeComboBox.getSelectedItem().toString()));
+            if (core.forthFeeComboBox.getSelectedItem() != null) {
+                core.forthFeeTxt.setText(fees.getFeeAmount(core.forthFeeComboBox.getSelectedItem().toString()));
+            } else if (core.forthFeeComboBox.getSelectedItem() == null) {
+                core.forthFeeTxt.setText("");
+            }
         });
         core.fifthFeeComboBox.addActionListener(e -> {
             //Update fee value based on selection of feeComboBox
-            core.fifthFeeTxt.setText(fees.getFeeAmount(core.fifthFeeComboBox.getSelectedItem().toString()));
+            if (core.fifthFeeComboBox.getSelectedItem() != null) {
+                core.fifthFeeTxt.setText(fees.getFeeAmount(core.fifthFeeComboBox.getSelectedItem().toString()));
+            } else if (core.fifthFeeComboBox.getSelectedItem() == null) {
+                core.fifthFeeTxt.setText("");
+            }
+        });
+    }
+
+    public static void fillFeesDateInCore() {
+
+        core.secondFeeComboBox.addActionListener(e -> {
+            //Update date value based on selection of feeComboBox
+            if (core.secondFeeComboBox.getSelectedItem() == null) {
+                return;
+            }
+            if (core.secondFeeComboBox.getSelectedItem() != null && core.secondFeeDateTxt.getText().equals("")) {
+                core.secondFeeDateTxt.setText(date.today());
+            } else if (core.secondFeeComboBox.getSelectedItem().equals("")) {
+                core.secondFeeComboBox.setSelectedIndex(-1);
+                core.secondFeeDateTxt.setText("");
+            }
+
+        });
+        core.thirdFeeComboBox.addActionListener(e -> {
+            if (core.thirdFeeComboBox.getSelectedItem() == null) {
+                return;
+            }
+            if (core.thirdFeeComboBox.getSelectedItem() != null && core.thirdFeeDateTxt.getText().equals("")) {
+                core.thirdFeeDateTxt.setText(date.today());
+            } else if (core.thirdFeeComboBox.getSelectedItem().equals("")) {
+                core.thirdFeeComboBox.setSelectedIndex(-1);
+                core.thirdFeeDateTxt.setText("");
+            }
+        });
+        core.forthFeeComboBox.addActionListener(e -> {
+            if (core.forthFeeComboBox.getSelectedItem() == null) {
+                return;
+            }
+            if (core.forthFeeComboBox.getSelectedItem() != null && core.forthFeeDateTxt.getText().equals("")) {
+                core.forthFeeDateTxt.setText(date.today());
+            } else if (core.forthFeeComboBox.getSelectedItem().equals("")) {
+                core.forthFeeComboBox.setSelectedIndex(-1);
+                core.forthFeeDateTxt.setText("");
+            }
+        });
+        core.fifthFeeComboBox.addActionListener(e -> {
+            if (core.fifthFeeComboBox.getSelectedItem() == null) {
+                return;
+            }
+            if (core.fifthFeeComboBox.getSelectedItem() != null && core.fifthFeeDateTxt.getText().equals("")) {
+                core.fifthFeeDateTxt.setText(date.today());
+            } else if (core.fifthFeeComboBox.getSelectedItem().equals("")) {
+                core.fifthFeeComboBox.setSelectedIndex(-1);
+                core.fifthFeeDateTxt.setText("");
+            }
         });
     }
 
     public static void updateFeesDropDownInCore() {
+        int firstFeeSelectedIndex = core.firstFeeComboBox.getSelectedIndex();
         core.firstFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.firstFeeComboBox.setSelectedIndex(firstFeeSelectedIndex);
+
+        int secondFeeSelectedIndex = core.secondFeeComboBox.getSelectedIndex();
         core.secondFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.secondFeeComboBox.setSelectedIndex(secondFeeSelectedIndex);
+
+        int thirdFeeSelectedIndex = core.thirdFeeComboBox.getSelectedIndex();
         core.thirdFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.thirdFeeComboBox.setSelectedIndex(thirdFeeSelectedIndex);
+
+        int forthFeeSelectedIndex = core.forthFeeComboBox.getSelectedIndex();
         core.forthFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.forthFeeComboBox.setSelectedIndex(forthFeeSelectedIndex);
+
+        int fifthFeeSelectedIndex = core.fifthFeeComboBox.getSelectedIndex();
         core.fifthFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.fifthFeeComboBox.setSelectedIndex(fifthFeeSelectedIndex);
     }
 
 }

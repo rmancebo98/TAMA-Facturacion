@@ -25,24 +25,40 @@ public class clients {
         JButton addClient;
         JButton deleteClient;
 
-        addPanel.add(new JLabel("Nombre del cliente :"));
+        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        namePanel.add(new JLabel("Nombre del cliente :"));
         JTextField nameTxt = new JTextField(25);
-        addPanel.add(nameTxt);
+        namePanel.add(nameTxt);
+        addPanel.add(namePanel);
 
-        addPanel.add(new JLabel("RNC:"));
+        JPanel rncPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        rncPanel.add(new JLabel("RNC:"));
         JTextField rncTxt = new JTextField(25);
-        addPanel.add(rncTxt);
+        rncPanel.add(rncTxt);
         formatter.setNumericOnly(rncTxt);
+        addPanel.add(rncPanel);
 
+        JPanel addressPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        addressPanel.add(new JLabel("Dirección:"));
+        JTextField addressTxt = new JTextField(30);
+        addressPanel.add(addressTxt);
+        addPanel.add(addressPanel);
+
+
+        JPanel createClientPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         addClient = new JButton("Crear cliente");
 
         addClient.addActionListener(e -> {
-            addValuesOnJson(nameTxt.getText(), rncTxt.getText());
+            addValuesOnJson(nameTxt.getText(), rncTxt.getText(), addressTxt.getText());
             updateClientsDropDown();
             core.updateClientsDropdown();
         });
 
-        addPanel.add(new JLabel("Clientes:"));
+        createClientPanel.add(addClient);
+        addPanel.add(createClientPanel);
+
+        JPanel deleteClientPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        deleteClientPanel.add(new JLabel("Clientes:"));
         String[] options = clients.getAllKeysFromJson().toArray(new String[0]);
         clientsDropDown = new JComboBox<>(options);
 
@@ -56,11 +72,12 @@ public class clients {
             core.updateClientsDropdown();
         });
 
-        addPanel.add(addClient);
-        addPanel.add(clientsDropDown);
-        addPanel.add(deleteClient);
+        deleteClientPanel.add(clientsDropDown);
+        deleteClientPanel.add(deleteClient);
+
+        addPanel.add(deleteClientPanel);
         addFrame.add(addPanel);
-        addFrame.setPreferredSize(new Dimension(300, 300));
+        addFrame.setPreferredSize(new Dimension(600, 300));
         addFrame.pack();
         addFrame.setLocationRelativeTo(null);
     }
@@ -74,7 +91,7 @@ public class clients {
         addFrame.setVisible(true);
     }
 
-    public static Map<String, String> readClientsJson() {
+    public static Map<String, Map<String, String>> readClientsJson() {
         ObjectMapper mapper = new ObjectMapper();
         Map data = null;
 
@@ -87,15 +104,19 @@ public class clients {
         return data;
     }
 
-    public static void addValuesOnJson(String client, String RNC) {
+    public static void addValuesOnJson(String client, String RNC, String address) {
         // Read the JSON file into a map
         ObjectMapper mapper = new ObjectMapper();
-        Map<String, String> clientData = readClientsJson();
+        Map<String, Map<String, String>> clientData = readClientsJson();
+        Map<String, String> clientInfo = new HashMap<>();
 
         client = client.toUpperCase();
 
         // Add the string to the map
-        clientData.put(client, RNC);
+        clientInfo.put("RNC", RNC);
+        clientInfo.put("Dirección", address);
+
+        clientData.put(client, clientInfo);
         // Write the modified map back to the JSON file
         try {
             if (checkIfClientExist(client)) {
@@ -120,7 +141,7 @@ public class clients {
         if (result == JOptionPane.OK_OPTION) {
             // Read the JSON file into a map
             ObjectMapper mapper = new ObjectMapper();
-            Map<String, String> clientData = readClientsJson();
+            Map<String, Map<String, String>> clientData = readClientsJson();
 
             client = client.toUpperCase();
 
@@ -140,8 +161,12 @@ public class clients {
     }
 
     public static boolean checkIfClientExist(String client) {
-        String clientFromJson = readClientsJson().get(client);
-        return clientFromJson != null && clientFromJson != "" && !clientFromJson.isEmpty();
+        try {
+            Map<String, String> clientFromJson = readClientsJson().get(client);
+            return clientFromJson != null && !clientFromJson.isEmpty();
+        } catch (NullPointerException ignore) {
+            return false;
+        }
     }
 
     public static Set<String> getAllKeysFromJson() {
@@ -152,10 +177,20 @@ public class clients {
     public static String getClientRNC(String client) {
         String actualRnc;
         try {
-            actualRnc = readClientsJson().get(client);
+            actualRnc = readClientsJson().get(client).get("RNC");
         } catch (NullPointerException nE) {
             actualRnc = "";
         }
         return actualRnc;
+    }
+
+    public static String getClientAddress(String client) {
+        String actualAddress;
+        try {
+            actualAddress = readClientsJson().get(client).get("Dirección");
+        } catch (NullPointerException ignore) {
+            actualAddress = "";
+        }
+        return actualAddress;
     }
 }

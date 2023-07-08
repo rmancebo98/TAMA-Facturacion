@@ -16,7 +16,7 @@ public class jsonHandler {
 
         // Write the modified map back to the JSON file
         try {
-            mapper.writeValue(new File("src/main/java/facturas/data.json"), data);
+            mapper.writeValue(new File("src/main/java/facturas/factura.json"), data);
             System.out.println("Data written to data.json");
             word.writeOnWord();
         } catch (IOException | InvalidFormatException ex) {
