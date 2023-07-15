@@ -7,6 +7,7 @@ import fees.fees;
 import util.date;
 import util.formatter;
 import util.ncf;
+import util.notifications;
 
 import javax.swing.*;
 import java.awt.*;
@@ -105,7 +106,11 @@ public class core extends JFrame implements ActionListener {
         rncPanel.add(RNCTxt);
 
         rncPanel.add(new JLabel("Numero de comprobante fiscal"));
-        NCFTxt = new JTextField(String.valueOf(ncf.getLastNCF()), 11);
+        try {
+            NCFTxt = new JTextField(String.valueOf(ncf.getLastNCF()), 11);
+        } catch (NullPointerException ignore) {
+            NCFTxt = new JTextField("B0100000001");
+        }
         formatter.setNumericOnly(NCFTxt);
         rncPanel.add(NCFTxt);
 
@@ -275,13 +280,21 @@ public class core extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // Read the JSON file into a map
         ObjectMapper mapper = new ObjectMapper();
-        Map<String, String> data = null;
-        try {
-            data = mapper.readValue(new File("src/main/java/facturas/factura.json"), Map.class);
-        } catch (IOException ex) {
-            // If the file doesn't exist, create a new empty map
-            data = new HashMap<String, String>();
-        }
+        Map<String, String> data = new HashMap<>();
+        Map<String, Map<String, String>> receiptInfoMap = new HashMap<>();
+        Map<String, Map<String, String>> firstFeeMap = new HashMap<>();
+        Map<String, Map<String, String>> secondFeeMap = new HashMap<>();
+        Map<String, Map<String, String>> thirdFeeMap = new HashMap<>();
+        Map<String, Map<String, String>> forthFeeMap = new HashMap<>();
+        Map<String, Map<String, String>> fifthFeeMap = new HashMap<>();
+        Map<Object, Object> finalData =  new HashMap<>();
+
+//        try {
+//            data = mapper.readValue(new File("src/main/java/facturas/factura.json"), Map.class);
+//        } catch (IOException ex) {
+//            // If the file doesn't exist, create a new empty map
+//            data = new HashMap<String, String>();
+//        }
 
         // Add the client data into the map
         data.put("Fecha", dateTxt.getText());
@@ -289,14 +302,94 @@ public class core extends JFrame implements ActionListener {
         data.put("Numero de Comprobante Fiscal", NCFTxt.getText());
         data.put("Cliente", clientsDropDown.getSelectedItem().toString());
         data.put("RNC del Cliente", clientRNC.getText());
+        receiptInfoMap.put("INFORMACION GENERAL", data);
 
         //Add the fees.fees data into the map
-        data.put(firstFeeComboBox.getSelectedItem().toString(), firstFeeTxt.getText());
-        data.put(secondFeeComboBox.getSelectedItem().toString(), secondFeeTxt.getText());
-        data.put(thirdFeeComboBox.getSelectedItem().toString(), thirdFeeTxt.getText());
-        data.put(firstFeeComboBox.getSelectedItem().toString(), firstFeeTxt.getText());
-        data.put(firstFeeComboBox.getSelectedItem().toString(), firstFeeTxt.getText());
 
-        jsonHandler.writeOnJson(data);
+        try {
+            if (firstFeeComboBox.getSelectedItem().toString().equals("")) {
+                notifications.showInformativeNotification("Por favor agrege un honorario a facturar"
+                        , "Agregue honorario");
+            } else {
+                Map<String, String> firstFeeData = new HashMap<>();
+                firstFeeData.put("Razon: ", firstFeeComboBox.getSelectedItem().toString());
+                firstFeeData.put("Monto: ", firstFeeTxt.getText());
+                firstFeeData.put("Fecha: ", firstFeeDateTxt.getText());
+                firstFeeMap.put("PRIMER HONORARIO:", firstFeeData);
+            }
+        } catch (NullPointerException ignore) {
+            notifications.showInformativeNotification("Por favor agrege un honorario a facturar"
+                    , "Agregue honorario");
+        }
+
+
+        try {
+            if (!secondFeeComboBox.getSelectedItem().toString().equals("")) {
+                Map<String, String> secondFeeData = new HashMap<>();
+                secondFeeData.put("Razon: ", firstFeeComboBox.getSelectedItem().toString());
+                secondFeeData.put("Monto: ", firstFeeTxt.getText());
+                secondFeeData.put("Fecha: ", firstFeeDateTxt.getText());
+                secondFeeMap.put("SEGUNDO HONORARIO:", secondFeeData);
+            }
+        } catch (NullPointerException ignore) {
+        }
+
+        try {
+            if (!thirdFeeComboBox.getSelectedItem().toString().equals("")) {
+                Map<String, String> thirdFeeData = new HashMap<>();
+                thirdFeeData.put("Razon: ", firstFeeComboBox.getSelectedItem().toString());
+                thirdFeeData.put("Monto: ", firstFeeTxt.getText());
+                thirdFeeData.put("Fecha: ", firstFeeDateTxt.getText());
+                thirdFeeMap.put("Tercer honorario:", thirdFeeData);
+            }
+        } catch (NullPointerException ignore) {
+        }
+
+        try {
+            if (!forthFeeComboBox.getSelectedItem().toString().equals("")) {
+                Map<String, String> forthFeeData = new HashMap<>();
+                forthFeeData.put("Razon: ", firstFeeComboBox.getSelectedItem().toString());
+                forthFeeData.put("Monto: ", firstFeeTxt.getText());
+                forthFeeData.put("Fecha: ", firstFeeDateTxt.getText());
+                forthFeeMap.put("Cuarto honorario:", forthFeeData);
+            }
+        } catch (NullPointerException ignore) {
+        }
+
+
+        try {
+            if (!fifthFeeComboBox.getSelectedItem().toString().equals("")) {
+                Map<String, String> fifthFeeData = new HashMap<>();
+                fifthFeeData.put("Razon: ", firstFeeComboBox.getSelectedItem().toString());
+                fifthFeeData.put("Monto: ", firstFeeTxt.getText());
+                fifthFeeData.put("Fecha: ", firstFeeDateTxt.getText());
+                fifthFeeMap.put("Cuarto honorario:", fifthFeeData);
+            }
+        } catch (NullPointerException ignore) {
+        }
+
+        finalData.putAll(receiptInfoMap);
+
+        if (!firstFeeMap.isEmpty()) {
+            finalData.putAll(firstFeeMap);
+        }
+
+        if (!secondFeeMap.isEmpty()) {
+            finalData.putAll(secondFeeMap);
+        }
+
+        if (!thirdFeeMap.isEmpty()) {
+            finalData.putAll(thirdFeeMap);
+        }
+
+        if (!forthFeeMap.isEmpty()) {
+            finalData.putAll(forthFeeMap);
+        }
+
+        if (!fifthFeeMap.isEmpty()) {
+            finalData.putAll(fifthFeeMap);
+        }
+
+        jsonHandler.writeOnJson(finalData);
     }
 }
