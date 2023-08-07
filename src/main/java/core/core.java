@@ -13,8 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
@@ -316,6 +314,7 @@ public class core extends JFrame implements ActionListener {
                 firstFeeData.put("Monto: ", firstFeeTxt.getText());
                 firstFeeData.put("Fecha: ", firstFeeDateTxt.getText());
                 firstFeeMap.put("PRIMER HONORARIO:", firstFeeData);
+                System.out.println(fifthFeeMap);
             }
         } catch (NullPointerException ignore) {
             notifications.showInformativeNotification("Por favor agrege un honorario a facturar"
@@ -326,9 +325,9 @@ public class core extends JFrame implements ActionListener {
         try {
             if (!secondFeeComboBox.getSelectedItem().toString().equals("")) {
                 Map<String, String> secondFeeData = new HashMap<>();
-                secondFeeData.put("Razon: ", firstFeeComboBox.getSelectedItem().toString());
-                secondFeeData.put("Monto: ", firstFeeTxt.getText());
-                secondFeeData.put("Fecha: ", firstFeeDateTxt.getText());
+                secondFeeData.put("Razon: ", secondFeeComboBox.getSelectedItem().toString());
+                secondFeeData.put("Monto: ", secondFeeTxt.getText());
+                secondFeeData.put("Fecha: ", secondFeeDateTxt.getText());
                 secondFeeMap.put("SEGUNDO HONORARIO:", secondFeeData);
             }
         } catch (NullPointerException ignore) {
@@ -337,9 +336,9 @@ public class core extends JFrame implements ActionListener {
         try {
             if (!thirdFeeComboBox.getSelectedItem().toString().equals("")) {
                 Map<String, String> thirdFeeData = new HashMap<>();
-                thirdFeeData.put("Razon: ", firstFeeComboBox.getSelectedItem().toString());
-                thirdFeeData.put("Monto: ", firstFeeTxt.getText());
-                thirdFeeData.put("Fecha: ", firstFeeDateTxt.getText());
+                thirdFeeData.put("Razon: ", thirdFeeComboBox.getSelectedItem().toString());
+                thirdFeeData.put("Monto: ", thirdFeeTxt.getText());
+                thirdFeeData.put("Fecha: ", thirdFeeDateTxt.getText());
                 thirdFeeMap.put("Tercer honorario:", thirdFeeData);
             }
         } catch (NullPointerException ignore) {
@@ -348,9 +347,9 @@ public class core extends JFrame implements ActionListener {
         try {
             if (!forthFeeComboBox.getSelectedItem().toString().equals("")) {
                 Map<String, String> forthFeeData = new HashMap<>();
-                forthFeeData.put("Razon: ", firstFeeComboBox.getSelectedItem().toString());
-                forthFeeData.put("Monto: ", firstFeeTxt.getText());
-                forthFeeData.put("Fecha: ", firstFeeDateTxt.getText());
+                forthFeeData.put("Razon: ", forthFeeComboBox.getSelectedItem().toString());
+                forthFeeData.put("Monto: ", forthFeeTxt.getText());
+                forthFeeData.put("Fecha: ", forthFeeDateTxt.getText());
                 forthFeeMap.put("Cuarto honorario:", forthFeeData);
             }
         } catch (NullPointerException ignore) {
@@ -360,10 +359,10 @@ public class core extends JFrame implements ActionListener {
         try {
             if (!fifthFeeComboBox.getSelectedItem().toString().equals("")) {
                 Map<String, String> fifthFeeData = new HashMap<>();
-                fifthFeeData.put("Razon: ", firstFeeComboBox.getSelectedItem().toString());
-                fifthFeeData.put("Monto: ", firstFeeTxt.getText());
-                fifthFeeData.put("Fecha: ", firstFeeDateTxt.getText());
-                fifthFeeMap.put("Cuarto honorario:", fifthFeeData);
+                fifthFeeData.put("Razon: ", fifthFeeComboBox.getSelectedItem().toString());
+                fifthFeeData.put("Monto: ", fifthFeeTxt.getText());
+                fifthFeeData.put("Fecha: ", fifthFeeDateTxt.getText());
+                fifthFeeMap.put("Quinto honorario:", fifthFeeData);
             }
         } catch (NullPointerException ignore) {
         }
@@ -390,6 +389,6 @@ public class core extends JFrame implements ActionListener {
             finalData.putAll(fifthFeeMap);
         }
 
-        jsonHandler.writeOnJson(finalData);
+        jsonHandler.writeOnFinalJson(finalData);
     }
 }

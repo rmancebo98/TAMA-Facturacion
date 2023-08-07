@@ -1,73 +1,102 @@
 package documentGenerator;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.util.Units;
-import org.apache.poi.wp.usermodel.HeaderFooterType;
 import org.apache.poi.xwpf.usermodel.*;
+import util.notifications;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class word {
 
+    public static Map<String, Map<String, String>> readReceiptJson() {
+        ObjectMapper mapper = new ObjectMapper();
+        Map data = null;
+
+        try {
+            data = mapper.readValue(new File("src/main/java/facturas/factura.json"), Map.class);
+        } catch (IOException ex) {
+            notifications.showErrorNotification("Error generando documento");
+        }
+        return data;
+    }
+
     public static void writeOnWord() throws IOException, InvalidFormatException {
+
+        Map<String, Map<String, String>> receiptJson = readReceiptJson();
+        Map<String, String> generalInfo = receiptJson.get("INFORMACION GENERAL");
+
         // Create a new document
-        XWPFDocument document = new XWPFDocument();
+        XWPFDocument document =
+                new XWPFDocument(new FileInputStream("src/main/resources/templates/template_receipt.docx"));
 
-        // Create header
-        XWPFHeader header = document.createHeader(HeaderFooterType.DEFAULT);
+        // Iterate over paragraphs in the document and replace text
+        for (XWPFParagraph paragraph : document.getParagraphs()) {
+            for (XWPFRun run : paragraph.getRuns()) {
+                for (int i = 0; i < run.getCTR().sizeOfTArray(); i++) {
+                    String text = run.getText(i);
+                    // Replace customer name
 
-        //Add an image to the header
+                    if (text != null && text.contains("[RNC_OFC]")) {
+                        text = text.replace("[RNC_OFC]", generalInfo.get("RNC")); // Replace with actual customer name
+                        run.setText(text, i);
+                    } else if (text != null && text.contains("[FECHA_FACTURACION]")) {
+                        text = text.replace("[FECHA_FACTURACION]", generalInfo.get("Fecha")); // Replace with actual customer name
+                        run.setText(text, i);
+                    } else if (text != null && text.contains("[NCF]")) {
+                        text = text.replace("[NCF]", generalInfo.get("Numero de Comprobante Fiscal")); // Replace with actual customer name
+                        run.setText(text, i);
+                    } else if (text != null && text.contains("[FECHA_VENCI]")) {
+                        text = text.replace("[FECHA_VENCI]", "TODO"); // Replace with actual customer name
+                        run.setText(text, i);
+                    } else if (text != null && text.contains("[RNC_CLIENT]")) {
+                        text = text.replace("[RNC_CLIENT]", generalInfo.get("RNC del Cliente")); // Replace with actual customer name
+                        run.setText(text, i);
+                    } else if (text != null && text.contains("[CLIENT_NAME]")) {
+                        text = text.replace("[CLIENT_NAME]", generalInfo.get("Cliente")); // Replace with actual customer name
+                        run.setText(text, i);
+                    }else if (text != null && text.contains("[ASEGURADO]")) {
+                        text = text.replace("[ASEGURADO]", "TODO"); // Replace with actual customer name
+                        run.setText(text, i);
+                    }else if (text != null && text.contains("[NUMERO_EXPEDIEN]")) {
+                        text = text.replace("[NUMERO_EXPEDIEN]", "TODO"); // Replace with actual customer name
+                        run.setText(text, i);
+                    }
+                }
 
-        XWPFParagraph headerImage = header.createParagraph();
-        headerImage.setAlignment(ParagraphAlignment.LEFT);
-        XWPFRun runHeaderImage = headerImage.createRun();
-        runHeaderImage.addPicture(
-                new FileInputStream("src/main/resources/logo/headerLogo.png"),
-                XWPFDocument.PICTURE_TYPE_PNG, "image.png", Units.toEMU(190), Units.toEMU(100));
+            }
+        }
 
-        //Writes on the header
-        XWPFParagraph headerText = header.createParagraph();
-        XWPFRun run = headerText.createRun();
-        run.setText("Abraham Lincoln No. 1017 – B, Res. Lincoln,");
-        headerText.setAlignment(ParagraphAlignment.RIGHT);
+        fillFeesTable(document);
 
-        XWPFParagraph headerText2 = header.createParagraph();
-        run = headerText2.createRun();
-        run.setText("Apto. 15, Ens. Piantini, Sto, Dgo, D.N.");
-        headerText2.setAlignment(ParagraphAlignment.RIGHT);
-
-        XWPFParagraph headerText3 = header.createParagraph();
-        run = headerText3.createRun();
-        run.setText("Tel: 809-245-7438/ 809-697-6625");
-        headerText3.setAlignment(ParagraphAlignment.RIGHT);
-
-        XWPFParagraph headerText4 = header.createParagraph();
-        run = headerText4.createRun();
-        run.setText("ctavarez@tavarezmancebo.com");
-        headerText4.setAlignment(ParagraphAlignment.RIGHT);
-
-        XWPFParagraph headerText5 = header.createParagraph();
-        run = headerText5.createRun();
-        run.setText("www.tavarezmancebo.com");
-        headerText5.setAlignment(ParagraphAlignment.RIGHT);
-
-        // Create a new paragraph
-        XWPFParagraph paragraph = document.createParagraph();
-
-        // Add text to the paragraph
-        run = paragraph.createRun();
-        run.setText("Hello, world!");
 
         // Save the document
         try {
             FileOutputStream out = new FileOutputStream("src/main/java/facturas/document.docx");
             document.write(out);
             out.close();
+            document.close();
         } catch (Exception e) {
             e.printStackTrace();
+            notifications.showErrorNotification("Error generando documento");
         }
     }
+
+    public static void fillFeesTable(XWPFDocument document){
+        XWPFTable table = document.getTables().get(0);
+
+        //fill first fee
+        // Access the first row of the table (assuming there is at least one row)
+        XWPFTableRow row = table.getRow(1);
+
+        // Access the first cell in the row (assuming there is at least one cell)
+        XWPFTableCell cell = row.getCell(0);
+
+        // Write new text to the cell
+        cell.setText("New content for A1");
+    }
+
 }
