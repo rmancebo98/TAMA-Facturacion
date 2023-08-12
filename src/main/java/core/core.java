@@ -25,7 +25,9 @@ public class core extends JFrame implements ActionListener {
     static JComboBox<String> clientsDropDown;
     JButton generateButtom;
     JTextField clientRNC;
+    JTextField insuredName;
     JTextField clientAddress;
+    JTextField caseNumber;
     public static JComboBox<String> firstFeeComboBox;
     public static JTextField firstFeeTxt;
     JTextField firstFeeDateTxt;
@@ -44,6 +46,7 @@ public class core extends JFrame implements ActionListener {
     JTextField RNCTxt;
     JTextField NCFTxt;
     JTextField dateTxt;
+    JTextField expirationDateTxt;
     JButton addClientButton;
     JButton addFeesButton;
 
@@ -61,6 +64,7 @@ public class core extends JFrame implements ActionListener {
 
         createHeaderPanel();
         createClientPanel();
+        createCasePanel();
         createFirstFeePanel();
         createSecondFeePanel();
         createThirdFeePanel();
@@ -94,8 +98,10 @@ public class core extends JFrame implements ActionListener {
         JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         datePanel.add(new JLabel("Fecha de facturación"));
         dateTxt = new JTextField(date.today());
-        datePanel.add(dateTxt);
-        mainPanel.add(datePanel);
+//        TODO: preguntarle a ma de esto
+//        expirationDateTxt = new JTextField(date.)
+//        datePanel.add(dateTxt);
+//        mainPanel.add(datePanel);
 
         JPanel rncPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         rncPanel.add(new JLabel("RNC"));
@@ -142,17 +148,31 @@ public class core extends JFrame implements ActionListener {
         }
         clientsPanel.add(clientRNC);
 
-        clientsPanel.add(new JLabel("Direccion del cliente: "));
-        clientAddress = new JTextField(100);
-        if (clientsDropDown.getSelectedItem() == null) {
-            clientAddress = new JTextField("", 100);
-        } else {
-            clientAddress = new JTextField(clients.getClientAddress(clientsDropDown.getSelectedItem().toString()), 100);
-        }
-
-        clientsPanel.add(clientAddress);
+//        clientsPanel.add(new JLabel("Direccion del cliente: "));
+//        clientAddress = new JTextField(100);
+//        if (clientsDropDown.getSelectedItem() == null) {
+//            clientAddress = new JTextField("", 100);
+//        } else {
+//            clientAddress = new JTextField(clients.getClientAddress(clientsDropDown.getSelectedItem().toString()), 100);
+//        }
+//
+//        clientsPanel.add(clientAddress);
         panel.add(clientsPanel);
 
+    }
+
+    private void createCasePanel() {
+        JPanel casePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        casePanel.add(new JLabel("Nombre del asegurado:"));
+        insuredName = new JTextField("", 12);
+        casePanel.add(insuredName);
+
+        casePanel.add(new JLabel("Numero de expediente: "));
+        caseNumber = new JTextField(20);
+
+        casePanel.add(caseNumber);
+        panel.add(casePanel);
     }
 
     private void createFirstFeePanel() {
@@ -285,7 +305,7 @@ public class core extends JFrame implements ActionListener {
         Map<String, Map<String, String>> thirdFeeMap = new HashMap<>();
         Map<String, Map<String, String>> forthFeeMap = new HashMap<>();
         Map<String, Map<String, String>> fifthFeeMap = new HashMap<>();
-        Map<Object, Object> finalData =  new HashMap<>();
+        Map<Object, Object> finalData = new HashMap<>();
 
 //        try {
 //            data = mapper.readValue(new File("src/main/java/facturas/factura.json"), Map.class);
@@ -300,6 +320,8 @@ public class core extends JFrame implements ActionListener {
         data.put("Numero de Comprobante Fiscal", NCFTxt.getText());
         data.put("Cliente", clientsDropDown.getSelectedItem().toString());
         data.put("RNC del Cliente", clientRNC.getText());
+        data.put("Nombre del asegurado", insuredName.getText());
+        data.put("Numero de expediente", caseNumber.getText());
         receiptInfoMap.put("INFORMACION GENERAL", data);
 
         //Add the fees.fees data into the map

@@ -56,34 +56,33 @@ public class word {
             for (XWPFRun run : paragraph.getRuns()) {
                 for (int i = 0; i < run.getCTR().sizeOfTArray(); i++) {
                     String text = run.getText(i);
-                    // Replace customer name
 
                     if (text != null && text.contains("[RNC_OFC]")) {
-                        text = text.replace("[RNC_OFC]", generalInfo.get("RNC")); // Replace with actual customer name
+                        text = text.replace("[RNC_OFC]", generalInfo.get("RNC"));
                         run.setText(text, i);
                     } else if (text != null && text.contains("[FECHA_FACTURACION]")) {
-                        text = text.replace("[FECHA_FACTURACION]", generalInfo.get("Fecha")); // Replace with actual customer name
+                        text = text.replace("[FECHA_FACTURACION]", generalInfo.get("Fecha"));
                         run.setText(text, i);
                     } else if (text != null && text.contains("[NCF]")) {
-                        text = text.replace("[NCF]", generalInfo.get("Numero de Comprobante Fiscal")); // Replace with actual customer name
+                        text = text.replace("[NCF]", generalInfo.get("Numero de Comprobante Fiscal"));
                         run.setText(text, i);
                     } else if (text != null && text.contains("[FECHA_VENCI]")) {
-                        text = text.replace("[FECHA_VENCI]", "TODO"); // Replace with actual customer name
+                        text = text.replace("[FECHA_VENCI]", "TODO");
                         run.setText(text, i);
                     } else if (text != null && text.contains("[RNC_CLIENT]")) {
-                        text = text.replace("[RNC_CLIENT]", generalInfo.get("RNC del Cliente")); // Replace with actual customer name
+                        text = text.replace("[RNC_CLIENT]", generalInfo.get("RNC del Cliente"));
                         run.setText(text, i);
-                    } else if (text != null && text.contains("[CLIENT_NAME]")) {
-                        text = text.replace("[CLIENT_NAME]", generalInfo.get("Cliente")); // Replace with actual customer name
+                    } else if (text != null && text.contains("[CLIENT_NAME          ]")) {
+                        text = text.replace("[CLIENT_NAME          ]",String.format("%-23s",generalInfo.get("Cliente")));
                         run.setText(text, i);
                     } else if (text != null && text.contains("[ASEGURADO]")) {
-                        text = text.replace("[ASEGURADO]", "TODO"); // Replace with actual customer name
+                        text = text.replace("[ASEGURADO]", generalInfo.get("Nombre del asegurado"));
                         run.setText(text, i);
                     } else if (text != null && text.contains("[NUMERO_EXPEDIEN]")) {
-                        text = text.replace("[NUMERO_EXPEDIEN]", "TODO"); // Replace with actual customer name
+                        text = text.replace("[NUMERO_EXPEDIEN]", generalInfo.get("Numero de expediente"));
                         run.setText(text, i);
                     } else if (text != null && text.contains("[SIGNATURE]")) {
-                        text = text.replace("[SIGNATURE]", generalInfo.get("Cliente")); // Replace with actual customer name
+                        text = text.replace("[SIGNATURE]", generalInfo.get("Cliente"));
                         run.setText(text, i);
                     }
                 }
@@ -92,7 +91,6 @@ public class word {
         }
 
         fillFeesTable(document);
-
 
         // Save the document
         try {
