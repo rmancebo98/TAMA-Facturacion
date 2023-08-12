@@ -9,7 +9,7 @@ import java.text.NumberFormat;
 
 public class formatter {
 
-    public static String formatIntoMoney(double amount) {
+    public static String    formatIntoMoney(double amount) {
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
         return formatter.format(amount);
     }
@@ -35,7 +35,7 @@ public class formatter {
         });
     }
 
-    public static void formatFieldAsNumber(JTextField field){
+    public static void formatFieldAsNumber(JTextField field) {
         field.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
@@ -45,7 +45,7 @@ public class formatter {
                     if (formatter.isMoney(amount)) {
                         field.setText(formatter.formatIntoMoney(Double.parseDouble(field.getText())));
                     }
-                } catch (NumberFormatException ignore){
+                } catch (NumberFormatException ignore) {
                     System.out.println("Amount is already formatted");
                 }
             }

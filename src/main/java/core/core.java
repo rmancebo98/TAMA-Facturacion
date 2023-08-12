@@ -339,7 +339,7 @@ public class core extends JFrame implements ActionListener {
                 thirdFeeData.put("Razon: ", thirdFeeComboBox.getSelectedItem().toString());
                 thirdFeeData.put("Monto: ", thirdFeeTxt.getText());
                 thirdFeeData.put("Fecha: ", thirdFeeDateTxt.getText());
-                thirdFeeMap.put("Tercer honorario:", thirdFeeData);
+                thirdFeeMap.put("TERCER HONORARIO:", thirdFeeData);
             }
         } catch (NullPointerException ignore) {
         }
@@ -350,7 +350,7 @@ public class core extends JFrame implements ActionListener {
                 forthFeeData.put("Razon: ", forthFeeComboBox.getSelectedItem().toString());
                 forthFeeData.put("Monto: ", forthFeeTxt.getText());
                 forthFeeData.put("Fecha: ", forthFeeDateTxt.getText());
-                forthFeeMap.put("Cuarto honorario:", forthFeeData);
+                forthFeeMap.put("CUARTO HONORARIO:", forthFeeData);
             }
         } catch (NullPointerException ignore) {
         }
@@ -362,7 +362,7 @@ public class core extends JFrame implements ActionListener {
                 fifthFeeData.put("Razon: ", fifthFeeComboBox.getSelectedItem().toString());
                 fifthFeeData.put("Monto: ", fifthFeeTxt.getText());
                 fifthFeeData.put("Fecha: ", fifthFeeDateTxt.getText());
-                fifthFeeMap.put("Quinto honorario:", fifthFeeData);
+                fifthFeeMap.put("QUINTO HONORARIO:", fifthFeeData);
             }
         } catch (NullPointerException ignore) {
         }
