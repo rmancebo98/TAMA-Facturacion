@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 public class ncf {
 
@@ -12,13 +13,13 @@ public class ncf {
     static String NCF = "B0100000001";
 
     public static String getLastNCF() {
-        try {
-            JsonNode root = mapper.readTree(new File("src/main/java/facturas/factura.json"));
-            // Get a value from the JSON object by its key
-            String currentNFC = root.get("Numero de Comprobante Fiscal").asText();
-            if (currentNFC.equals("")) {
-                return NCF;
-            }
+        // Get a value from the JSON object by its key
+        Map<String, Map<String, String>> receiptJson = readReceiptJson();
+        Map<String, String> generalInfo = receiptJson.get("INFORMACION GENERAL");
+        String currentNFC = generalInfo.get("Numero de Comprobante Fiscal");
+        if (currentNFC.equals("")) {
+            return NCF;
+        } else {
             String numericPart = currentNFC.substring(3);
 
             // Incrementar el valor numérico en 1
@@ -27,9 +28,19 @@ public class ncf {
             // Combinar el prefijo "B01" con el valor numérico incrementado
             NCF = "B01" + String.format("%09d", incrementedValue);
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            return NCF;
         }
-        return NCF;
+    }
+
+    public static Map<String, Map<String, String>> readReceiptJson() {
+        ObjectMapper mapper = new ObjectMapper();
+        Map data = null;
+
+        try {
+            data = mapper.readValue(new File("src/main/java/facturas/factura.json"), Map.class);
+        } catch (IOException ex) {
+            notifications.showErrorNotification("Error generando documento");
+        }
+        return data;
     }
 }

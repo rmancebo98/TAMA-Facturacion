@@ -98,10 +98,11 @@ public class core extends JFrame implements ActionListener {
         JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         datePanel.add(new JLabel("Fecha de facturación"));
         dateTxt = new JTextField(date.today());
-//        TODO: preguntarle a ma de esto
-//        expirationDateTxt = new JTextField(date.)
-//        datePanel.add(dateTxt);
-//        mainPanel.add(datePanel);
+        expirationDateTxt = new JTextField(date.getLastDayOfYear());
+        datePanel.add(dateTxt);
+        datePanel.add(new JLabel("Fecha de expiración"));
+        datePanel.add(expirationDateTxt);
+        mainPanel.add(datePanel);
 
         JPanel rncPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         rncPanel.add(new JLabel("RNC"));
@@ -148,15 +149,15 @@ public class core extends JFrame implements ActionListener {
         }
         clientsPanel.add(clientRNC);
 
-//        clientsPanel.add(new JLabel("Direccion del cliente: "));
-//        clientAddress = new JTextField(100);
-//        if (clientsDropDown.getSelectedItem() == null) {
-//            clientAddress = new JTextField("", 100);
-//        } else {
-//            clientAddress = new JTextField(clients.getClientAddress(clientsDropDown.getSelectedItem().toString()), 100);
-//        }
-//
-//        clientsPanel.add(clientAddress);
+        clientsPanel.add(new JLabel("Direccion del cliente: "));
+        clientAddress = new JTextField(100);
+        if (clientsDropDown.getSelectedItem() == null) {
+            clientAddress = new JTextField("", 100);
+        } else {
+            clientAddress = new JTextField(clients.getClientAddress(clientsDropDown.getSelectedItem().toString()), 100);
+        }
+
+        clientsPanel.add(clientAddress);
         panel.add(clientsPanel);
 
     }
@@ -307,15 +308,10 @@ public class core extends JFrame implements ActionListener {
         Map<String, Map<String, String>> fifthFeeMap = new HashMap<>();
         Map<Object, Object> finalData = new HashMap<>();
 
-//        try {
-//            data = mapper.readValue(new File("src/main/java/facturas/factura.json"), Map.class);
-//        } catch (IOException ex) {
-//            // If the file doesn't exist, create a new empty map
-//            data = new HashMap<String, String>();
-//        }
 
         // Add the client data into the map
         data.put("Fecha", dateTxt.getText());
+        data.put("Fecha de expiracion", expirationDateTxt.getText());
         data.put("RNC", RNCTxt.getText());
         data.put("Numero de Comprobante Fiscal", NCFTxt.getText());
         data.put("Cliente", clientsDropDown.getSelectedItem().toString());
@@ -412,5 +408,6 @@ public class core extends JFrame implements ActionListener {
         }
 
         jsonHandler.writeOnFinalJson(finalData);
+        NCFTxt.setText(ncf.getLastNCF());
     }
 }

@@ -8,6 +8,7 @@ import util.formatter;
 import util.maths;
 import util.notifications;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -67,7 +68,7 @@ public class word {
                         text = text.replace("[NCF]", generalInfo.get("Numero de Comprobante Fiscal"));
                         run.setText(text, i);
                     } else if (text != null && text.contains("[FECHA_VENCI]")) {
-                        text = text.replace("[FECHA_VENCI]", "TODO");
+                        text = text.replace("[FECHA_VENCI]", generalInfo.get("Fecha de expiracion"));
                         run.setText(text, i);
                     } else if (text != null && text.contains("[RNC_CLIENT]")) {
                         text = text.replace("[RNC_CLIENT]", generalInfo.get("RNC del Cliente"));
@@ -92,15 +93,29 @@ public class word {
 
         fillFeesTable(document);
 
-        // Save the document
-        try {
-            FileOutputStream out = new FileOutputStream("src/main/java/facturas/document.docx");
-            document.write(out);
-            out.close();
-            document.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            notifications.showErrorNotification("Error generando documento");
+        // Prompt the user to choose a file location and name
+        JFileChooser fileChooser = new JFileChooser();
+        int userChoice = fileChooser.showSaveDialog(null);
+
+        if (userChoice == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            String filePath = selectedFile.getAbsolutePath();
+
+            // Add the .docx extension if not provided by the user
+            if (!filePath.toLowerCase().endsWith(".docx")) {
+                filePath += ".docx";
+            }
+
+            // Save the document
+            try {
+                FileOutputStream out = new FileOutputStream(filePath);
+                document.write(out);
+                out.close();
+                document.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                notifications.showErrorNotification("Error generando documento");
+            }
         }
     }
 

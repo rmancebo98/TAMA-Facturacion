@@ -10,4 +10,10 @@ public class date {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return today.format(formatter);
     }
+
+    public static String getLastDayOfYear() {
+        LocalDate lastDayOfYear = LocalDate.of(LocalDate.now().getYear(), 12, 31);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return lastDayOfYear.plusYears(1).format(formatter);
+    }
 }
