@@ -1,6 +1,5 @@
 package util;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -9,7 +8,6 @@ import java.util.Map;
 
 public class ncf {
 
-    static ObjectMapper mapper = new ObjectMapper();
     static String NCF = "B0100000001";
 
     public static String getLastNCF() {

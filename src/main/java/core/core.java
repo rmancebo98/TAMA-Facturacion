@@ -50,8 +50,16 @@ public class core extends JFrame implements ActionListener {
     JButton addClientButton;
     JButton addFeesButton;
 
+    public static void main(String[] args) {
+        new core();
+    }
+
     public core() {
         super("Tavarez y Mancebo - Sistema de facturación");
+        // Load the icon image
+        ImageIcon icon = new ImageIcon("src/main/resources/icons/app.png");
+        setIconImage(icon.getImage());
+
         createReceiptWindow();
     }
 
@@ -82,10 +90,6 @@ public class core extends JFrame implements ActionListener {
         fees.formatFeesTxtInCore();
         fees.fillFeesTxtInCore();
         fees.fillFeesDateInCore();
-    }
-
-    public static void main(String[] args) {
-        new core();
     }
 
     public static void updateClientsDropdown() {
