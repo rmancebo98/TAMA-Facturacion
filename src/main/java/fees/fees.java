@@ -20,7 +20,7 @@ import java.util.Set;
 public class fees {
 
     private static JFrame addFrame;
-    private static final String feesPath = "src/main/java/fees/fees.json";
+    private static final String feesPath = "src/main/resources/json/fees.json";
     static JComboBox<String> feesDropDown;
 
     public static void createFeeWindow() {

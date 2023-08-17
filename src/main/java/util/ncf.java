@@ -35,8 +35,9 @@ public class ncf {
         Map data = null;
 
         try {
-            data = mapper.readValue(new File("src/main/java/facturas/factura.json"), Map.class);
+            data = mapper.readValue(new File("src/main/resources/json/factura.json"), Map.class);
         } catch (IOException ex) {
+            ex.printStackTrace();
             notifications.showErrorNotification("Error generando documento");
         }
         return data;

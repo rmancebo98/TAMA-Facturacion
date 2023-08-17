@@ -18,7 +18,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>core.core</mainClass> <!-- Cambia 'core.core' por tu clase principal -->
+                            <mainClass>core.core</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -45,6 +45,12 @@
                 </executions>
             </plugin>
         </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
     </build>
 
     <properties>

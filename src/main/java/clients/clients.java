@@ -16,7 +16,7 @@ import java.util.Set;
 public class clients {
 
     private static JFrame addFrame;
-    private static final String clientsPath = "src/main/java/clients/clients.json";
+    private static final String clientsPath = "src/main/resources/json/clients.json";
     static JComboBox<String> clientsDropDown;
 
     public static void createClientWindow() {
