@@ -16,7 +16,7 @@ import java.util.Set;
 public class clients {
 
     private static JFrame addFrame;
-    private static final String clientsPath = "src/main/resources/json/clients.json";
+    private static final String clientsPath = core.sourceFolder+"/json/clients.json";
     static JComboBox<String> clientsDropDown;
 
     public static void createClientWindow() {
@@ -120,9 +120,9 @@ public class clients {
         // Write the modified map back to the JSON file
         try {
             if (checkIfClientExist(client)) {
-                notifications.showPopUpNotification("El cliente ya existe, actualizando RNC", "Actualizando cliente");
+                notifications.showInformativeNotification("El cliente ya existe, actualizando RNC", "Actualizando cliente");
             } else {
-                notifications.showPopUpNotification("Cliente añadido", "Operación exitosa");
+                notifications.showInformativeNotification("Cliente añadido", "Operación exitosa");
             }
             mapper.writeValue(new File(clientsPath), clientData);
             System.out.println("Client " + client + " added to clients.clients.json");
@@ -134,9 +134,8 @@ public class clients {
     }
 
     public static void deleteValuesOnJson(String client) {
-        ImageIcon icon = new ImageIcon("src/main/resources/icons/alert.png");
         int result =
-                JOptionPane.showConfirmDialog(null, "Esta seguro que desea borrar el cliente " + client + "?", "Borrar cliente", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, icon);
+                JOptionPane.showConfirmDialog(null, "Esta seguro que desea borrar el cliente " + client + "?", "Borrar cliente", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
             // Read the JSON file into a map
@@ -152,7 +151,7 @@ public class clients {
             try {
                 mapper.writeValue(new File(clientsPath), clientData);
                 System.out.println("Client " + client + " deleted from clients.clients.json");
-                notifications.showPopUpNotification("Cliente " + client + " eliminado", "Cliente eliminado");
+                notifications.showInformativeNotification("Cliente " + client + " eliminado", "Cliente eliminado");
             } catch (IOException ex) {
                 ex.printStackTrace();
                 notifications.showErrorNotification("Error eliminando cliente");

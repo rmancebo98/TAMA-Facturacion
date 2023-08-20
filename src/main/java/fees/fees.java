@@ -20,7 +20,7 @@ import java.util.Set;
 public class fees {
 
     private static JFrame addFrame;
-    private static final String feesPath = "src/main/resources/json/fees.json";
+    private static final String feesPath = core.sourceFolder + "/json/fees.json";
     static JComboBox<String> feesDropDown;
 
     public static void createFeeWindow() {
@@ -113,9 +113,9 @@ public class fees {
         // Write the modified map back to the JSON file
         try {
             if (checkIfFeeExist(fee)) {
-                notifications.showPopUpNotification("El honorario ya existe, actualizando el monto", "Actualizando honorario");
+                notifications.showInformativeNotification("El honorario ya existe, actualizando el monto", "Actualizando honorario");
             } else {
-                notifications.showPopUpNotification("Honorario añadido", "Operación exitosa");
+                notifications.showInformativeNotification("Honorario añadido", "Operación exitosa");
             }
             mapper.writeValue(new File(feesPath), feeData);
             System.out.println("Fee " + fee + " added to fees.fees.json");
@@ -127,9 +127,8 @@ public class fees {
     }
 
     public static void deleteValuesOnJson(String fee) {
-        ImageIcon icon = new ImageIcon("src/main/resources/icons/alert.png");
         int result =
-                JOptionPane.showConfirmDialog(null, "Esta seguro que desea borrar el honorario " + fee + "?", "Borrar honorario", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, icon);
+                JOptionPane.showConfirmDialog(null, "Esta seguro que desea borrar el honorario " + fee + "?", "Borrar honorario", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
             // Read the JSON file into a map
@@ -145,7 +144,7 @@ public class fees {
             try {
                 mapper.writeValue(new File(feesPath), feeData);
                 System.out.println("Fee " + fee + " deleted from fees.fees.json");
-                notifications.showPopUpNotification("Honorario " + fee + " eliminado", "Honorario eliminado");
+                notifications.showInformativeNotification("Honorario " + fee + " eliminado", "Honorario eliminado");
             } catch (IOException ex) {
                 ex.printStackTrace();
                 notifications.showErrorNotification("Error eliminando honorario");

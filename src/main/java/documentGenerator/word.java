@@ -2,6 +2,7 @@ package documentGenerator;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import core.core;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xwpf.usermodel.*;
 import util.formatter;
@@ -36,7 +37,7 @@ public class word {
         Map data = null;
 
         try {
-            data = mapper.readValue(new File("src/main/resources/json/factura.json"), Map.class);
+            data = mapper.readValue(new File(core.sourceFolder + "/json/factura.json"), Map.class);
         } catch (IOException ex) {
             ex.printStackTrace();
             notifications.showErrorNotification("Error generando documento");
@@ -51,7 +52,7 @@ public class word {
 
         // Create a new document
         XWPFDocument document =
-                new XWPFDocument(new FileInputStream("src/main/resources/templates/template_receipt.docx"));
+                new XWPFDocument(new FileInputStream(core.sourceFolder + "/templates/template_receipt.docx"));
 
         // Iterate over paragraphs in the document and replace text
         for (XWPFParagraph paragraph : document.getParagraphs()) {
@@ -75,7 +76,7 @@ public class word {
                         text = text.replace("[RNC_CLIENT]", generalInfo.get("RNC del Cliente"));
                         run.setText(text, i);
                     } else if (text != null && text.contains("[CLIENT_NAME          ]")) {
-                        text = text.replace("[CLIENT_NAME          ]",String.format("%-23s",generalInfo.get("Cliente")));
+                        text = text.replace("[CLIENT_NAME          ]", String.format("%-23s", generalInfo.get("Cliente")));
                         run.setText(text, i);
                     } else if (text != null && text.contains("[ASEGURADO]")) {
                         text = text.replace("[ASEGURADO]", generalInfo.get("Nombre del asegurado"));
@@ -203,7 +204,7 @@ public class word {
         //Fill totals
         table.getRow(6).getCell(2).setText(sumAllValues(amounts));
         table.getRow(6).getCell(3).setText(sumAllValues(ITBIS));
-        table.getRow(6).getCell(4).setText(sumAllValues(amounts,ITBIS));
+        table.getRow(6).getCell(4).setText(sumAllValues(amounts, ITBIS));
         //Fill 30% row
         table.getRow(7).getCell(4).setText(calculateMapfreRetention());
         //Fill total to pay
@@ -213,7 +214,7 @@ public class word {
 
     private static String sumAllValues(ArrayList<Double> listToSum) {
         double total = 0;
-        for(double amount : listToSum) {
+        for (double amount : listToSum) {
             total = total + amount;
         }
         return formatter.formatIntoMoney(total);
@@ -221,19 +222,19 @@ public class word {
 
     private static String sumAllValues(ArrayList<Double> firstListToSum, ArrayList<Double> secondListToSum) {
         double total = 0;
-        for(double amount : firstListToSum) {
+        for (double amount : firstListToSum) {
             total = total + amount;
         }
-        for(double amount : secondListToSum) {
+        for (double amount : secondListToSum) {
             total = total + amount;
         }
         plainTotal = total;
         return formatter.formatIntoMoney(total);
     }
 
-    private static String calculateMapfreRetention(){
+    private static String calculateMapfreRetention() {
         double total = 0;
-        for(double amount : ITBIS) {
+        for (double amount : ITBIS) {
             total = total + amount;
         }
         mapfreRetention = total * 0.3;
