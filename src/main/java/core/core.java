@@ -49,17 +49,15 @@ public class core extends JFrame implements ActionListener {
     JTextField expirationDateTxt;
     JButton addClientButton;
     JButton addFeesButton;
+    public static String sourceFolder;
 
     public static void main(String[] args) {
+        sourceFolder = args[0];
         new core();
     }
 
     public core() {
         super("Tavarez y Mancebo - Sistema de facturación");
-        // Load the icon image
-        ImageIcon icon = new ImageIcon("src/main/resources/icons/app.png");
-        setIconImage(icon.getImage());
-
         createReceiptWindow();
     }
 
