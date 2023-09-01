@@ -41,12 +41,11 @@ public class formatter {
             public void focusLost(FocusEvent e) {
                 try {
                     double amount = Double.parseDouble(field.getText());
-
                     if (formatter.isMoney(amount)) {
                         field.setText(formatter.formatIntoMoney(Double.parseDouble(field.getText())));
                     }
                 } catch (NumberFormatException ignore) {
-                    System.out.println("Amount is already formatted");
+
                 }
             }
         });

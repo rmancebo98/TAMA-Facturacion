@@ -334,7 +334,6 @@ public class core extends JFrame implements ActionListener {
                 firstFeeData.put("Monto: ", firstFeeTxt.getText());
                 firstFeeData.put("Fecha: ", firstFeeDateTxt.getText());
                 firstFeeMap.put("PRIMER HONORARIO:", firstFeeData);
-                System.out.println(fifthFeeMap);
             }
         } catch (NullPointerException ignore) {
             notifications.showInformativeNotification("Por favor agrege un honorario a facturar"

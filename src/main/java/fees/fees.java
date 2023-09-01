@@ -28,28 +28,33 @@ public class fees {
         JPanel addPanel = new JPanel();
         JButton addFee;
         JButton deleteFee;
+        JTextField amountTxt = new JTextField(25);
+        addFee = new JButton("Agregar honorario");
 
         addPanel.add(new JLabel("Nombre del honorario:"));
-        JTextField nameTxt = new JTextField(25);
-        addPanel.add(nameTxt);
+        String[] options = fees.getAllKeysFromJson().toArray(new String[0]);
+        feesDropDown = new JComboBox<>(options);
+        feesDropDown.setSelectedIndex(-1);
+        feesDropDown.setEditable(true);
+        addPanel.add(feesDropDown);
+        feesDropDown.addActionListener(e -> {
+            if (feesDropDown.getSelectedIndex() != -1) {
+                amountTxt.setText(getFeeAmount((String) feesDropDown.getSelectedItem()));
+            }
+        });
 
         addPanel.add(new JLabel("Monto:"));
-        JTextField amountTxt = new JTextField(25);
         addPanel.add(amountTxt);
         formatter.formatFieldAsNumber(amountTxt);
 
-        addFee = new JButton("Agregar honorario");
-
         addFee.addActionListener(e -> {
-            addValuesOnJson(nameTxt.getText(), amountTxt.getText());
+            addValuesOnJson((String) feesDropDown.getSelectedItem(), amountTxt.getText());
             updateFeesDropDown();
             updateFeesDropDownInCore();
+            try{
+            feesDropDown.setSelectedIndex(options.length);
+            } catch (Exception ignore) {}
         });
-
-        addPanel.add(new JLabel("Honorarios:"));
-        String[] options = fees.getAllKeysFromJson().toArray(new String[0]);
-        feesDropDown = new JComboBox<>(options);
-
 
         deleteFee = new JButton("Eliminar honorario");
         deleteFee.setBackground(Color.RED);
@@ -58,10 +63,10 @@ public class fees {
             deleteValuesOnJson(feesDropDown.getSelectedItem().toString());
             updateFeesDropDown();
             updateFeesDropDownInCore();
+            feesDropDown.setSelectedIndex(-1);
         });
 
         addPanel.add(addFee);
-        addPanel.add(feesDropDown);
         addPanel.add(deleteFee);
         addFrame.add(addPanel);
         addFrame.setPreferredSize(new Dimension(300, 300));
@@ -95,7 +100,7 @@ public class fees {
         String feeAmount;
         try {
             feeAmount = readFeesJson().get(fee);
-        } catch (NullPointerException nE) {
+        } catch (NullPointerException ignore) {
             feeAmount = "$0";
         }
         return feeAmount;
@@ -118,7 +123,6 @@ public class fees {
                 notifications.showInformativeNotification("Honorario añadido", "Operación exitosa");
             }
             mapper.writeValue(new File(feesPath), feeData);
-            System.out.println("Fee " + fee + " added to fees.fees.json");
         } catch (IOException ex) {
             ex.printStackTrace();
             notifications.showErrorNotification("Error añadiendo honorario");
@@ -143,7 +147,6 @@ public class fees {
             // Write the modified map back to the JSON file
             try {
                 mapper.writeValue(new File(feesPath), feeData);
-                System.out.println("Fee " + fee + " deleted from fees.fees.json");
                 notifications.showInformativeNotification("Honorario " + fee + " eliminado", "Honorario eliminado");
             } catch (IOException ex) {
                 ex.printStackTrace();

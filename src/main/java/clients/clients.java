@@ -16,7 +16,7 @@ import java.util.Set;
 public class clients {
 
     private static JFrame addFrame;
-    private static final String clientsPath = core.sourceFolder+"/json/clients.json";
+    private static final String clientsPath = core.sourceFolder + "/json/clients.json";
     static JComboBox<String> clientsDropDown;
 
     public static void createClientWindow() {
@@ -24,43 +24,45 @@ public class clients {
         JPanel addPanel = new JPanel();
         JButton addClient;
         JButton deleteClient;
+        JTextField rncTxt = new JTextField(25);
 
         JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         namePanel.add(new JLabel("Nombre del cliente :"));
-        JTextField nameTxt = new JTextField(25);
-        namePanel.add(nameTxt);
+        String[] options = clients.getAllKeysFromJson().toArray(new String[0]);
+        clientsDropDown = new JComboBox<>(options);
+        clientsDropDown.setSelectedIndex(-1);
+        clientsDropDown.setEditable(true);
+        clientsDropDown.addActionListener(e -> {
+            if (clientsDropDown.getSelectedIndex() != -1) {
+                rncTxt.setText(readClientsJson().get(clientsDropDown.getSelectedItem()).get("RNC"));
+            }
+        });
+        namePanel.add(clientsDropDown);
         addPanel.add(namePanel);
+
+        JPanel deleteClientPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         JPanel rncPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         rncPanel.add(new JLabel("RNC:"));
-        JTextField rncTxt = new JTextField(25);
         rncPanel.add(rncTxt);
         formatter.setNumericOnly(rncTxt);
         addPanel.add(rncPanel);
 
-        JPanel addressPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        addressPanel.add(new JLabel("Dirección:"));
-        JTextField addressTxt = new JTextField(30);
-        addressPanel.add(addressTxt);
-        addPanel.add(addressPanel);
 
 
         JPanel createClientPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         addClient = new JButton("Crear cliente");
 
         addClient.addActionListener(e -> {
-            addValuesOnJson(nameTxt.getText(), rncTxt.getText(), addressTxt.getText());
+            addValuesOnJson((String) clientsDropDown.getSelectedItem(), rncTxt.getText());
             updateClientsDropDown();
             core.updateClientsDropdown();
+            try {
+                clientsDropDown.setSelectedIndex(options.length);
+            } catch (Exception ignore) {}
         });
 
-        createClientPanel.add(addClient);
         addPanel.add(createClientPanel);
-
-        JPanel deleteClientPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        deleteClientPanel.add(new JLabel("Clientes:"));
-        String[] options = clients.getAllKeysFromJson().toArray(new String[0]);
-        clientsDropDown = new JComboBox<>(options);
 
 
         deleteClient = new JButton("Eliminar cliente");
@@ -70,9 +72,10 @@ public class clients {
             deleteValuesOnJson(clientsDropDown.getSelectedItem().toString());
             updateClientsDropDown();
             core.updateClientsDropdown();
+            clientsDropDown.setSelectedIndex(-1);
         });
 
-        deleteClientPanel.add(clientsDropDown);
+        deleteClientPanel.add(addClient);
         deleteClientPanel.add(deleteClient);
 
         addPanel.add(deleteClientPanel);
@@ -104,7 +107,7 @@ public class clients {
         return data;
     }
 
-    public static void addValuesOnJson(String client, String RNC, String address) {
+    public static void addValuesOnJson(String client, String RNC) {
         // Read the JSON file into a map
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Map<String, String>> clientData = readClientsJson();
@@ -114,7 +117,7 @@ public class clients {
 
         // Add the string to the map
         clientInfo.put("RNC", RNC);
-        clientInfo.put("Dirección", address);
+//        clientInfo.put("Dirección", address);
 
         clientData.put(client, clientInfo);
         // Write the modified map back to the JSON file
@@ -125,7 +128,6 @@ public class clients {
                 notifications.showInformativeNotification("Cliente añadido", "Operación exitosa");
             }
             mapper.writeValue(new File(clientsPath), clientData);
-            System.out.println("Client " + client + " added to clients.clients.json");
         } catch (IOException ex) {
             ex.printStackTrace();
             notifications.showErrorNotification("Error añadiendo cliente");
@@ -150,8 +152,6 @@ public class clients {
             // Write the modified map back to the JSON file
             try {
                 mapper.writeValue(new File(clientsPath), clientData);
-                System.out.println("Client " + client + " deleted from clients.clients.json");
-                notifications.showInformativeNotification("Cliente " + client + " eliminado", "Cliente eliminado");
             } catch (IOException ex) {
                 ex.printStackTrace();
                 notifications.showErrorNotification("Error eliminando cliente");
