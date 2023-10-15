@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class ncf {
 
-    static String NCF = "B0100000001";
+    static String NCF = "B010000001";
 
     public static String getLastNCF() {
         // Get a value from the JSON object by its key
@@ -25,7 +25,7 @@ public class ncf {
             long incrementedValue = Long.parseLong(numericPart) + 1;
 
             // Combinar el prefijo "B01" con el valor numérico incrementado
-            NCF = "B01" + String.format("%09d", incrementedValue);
+            NCF = "B01" + String.format("%07d", incrementedValue);
 
             return NCF;
         }

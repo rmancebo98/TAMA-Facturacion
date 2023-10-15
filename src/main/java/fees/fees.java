@@ -45,15 +45,17 @@ public class fees {
 
         addPanel.add(new JLabel("Monto:"));
         addPanel.add(amountTxt);
+        formatter.setNumericOnly(amountTxt);
         formatter.formatFieldAsNumber(amountTxt);
 
         addFee.addActionListener(e -> {
             addValuesOnJson((String) feesDropDown.getSelectedItem(), amountTxt.getText());
             updateFeesDropDown();
             updateFeesDropDownInCore();
-            try{
-            feesDropDown.setSelectedIndex(options.length);
-            } catch (Exception ignore) {}
+            try {
+                feesDropDown.setSelectedIndex(options.length);
+            } catch (Exception ignore) {
+            }
         });
 
         deleteFee = new JButton("Eliminar honorario");
@@ -69,7 +71,7 @@ public class fees {
         addPanel.add(addFee);
         addPanel.add(deleteFee);
         addFrame.add(addPanel);
-        addFrame.setPreferredSize(new Dimension(300, 300));
+        addFrame.setPreferredSize(new Dimension(400, 300));
         addFrame.pack();
         addFrame.setLocationRelativeTo(null);
     }
@@ -147,7 +149,8 @@ public class fees {
             // Write the modified map back to the JSON file
             try {
                 mapper.writeValue(new File(feesPath), feeData);
-                notifications.showInformativeNotification("Honorario " + fee + " eliminado", "Honorario eliminado");
+                notifications.showInformativeNotification("Honorario " + fee
+                        + " eliminado", "Honorario eliminado");
             } catch (IOException ex) {
                 ex.printStackTrace();
                 notifications.showErrorNotification("Error eliminando honorario");
@@ -194,6 +197,36 @@ public class fees {
             @Override
             public void focusLost(FocusEvent e) {
                 core.fifthFeeTxt.setText(format.formatAsMoney(core.fifthFeeTxt.getText()));
+            }
+        });
+        core.sixthFeeTxt.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                core.sixthFeeTxt.setText(format.formatAsMoney(core.sixthFeeTxt.getText()));
+            }
+        });
+        core.seventhFeeTxt.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                core.seventhFeeTxt.setText(format.formatAsMoney(core.seventhFeeTxt.getText()));
+            }
+        });
+        core.eighthFeeTxt.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                core.eighthFeeTxt.setText(format.formatAsMoney(core.eighthFeeTxt.getText()));
+            }
+        });
+        core.ninethFeeTxt.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                core.ninethFeeTxt.setText(format.formatAsMoney(core.ninethFeeTxt.getText()));
+            }
+        });
+        core.tenthFeeTxt.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                core.tenthFeeTxt.setText(format.formatAsMoney(core.tenthFeeTxt.getText()));
             }
         });
     }
@@ -250,6 +283,46 @@ public class fees {
                 core.fifthFeeTxt.setText("");
             }
         });
+        core.sixthFeeComboBox.addActionListener(e -> {
+            //Update fee value based on selection of feeComboBox
+            if (core.sixthFeeComboBox.getSelectedItem() != null) {
+                core.sixthFeeTxt.setText(fees.getFeeAmount(core.sixthFeeComboBox.getSelectedItem().toString()));
+            } else if (core.sixthFeeComboBox.getSelectedItem() == null) {
+                core.sixthFeeTxt.setText("");
+            }
+        });
+        core.seventhFeeComboBox.addActionListener(e -> {
+            //Update fee value based on selection of feeComboBox
+            if (core.seventhFeeComboBox.getSelectedItem() != null) {
+                core.seventhFeeTxt.setText(fees.getFeeAmount(core.seventhFeeComboBox.getSelectedItem().toString()));
+            } else if (core.seventhFeeComboBox.getSelectedItem() == null) {
+                core.seventhFeeTxt.setText("");
+            }
+        });
+        core.eighthFeeComboBox.addActionListener(e -> {
+            //Update fee value based on selection of feeComboBox
+            if (core.eighthFeeComboBox.getSelectedItem() != null) {
+                core.eighthFeeTxt.setText(fees.getFeeAmount(core.eighthFeeComboBox.getSelectedItem().toString()));
+            } else if (core.eighthFeeComboBox.getSelectedItem() == null) {
+                core.eighthFeeTxt.setText("");
+            }
+        });
+        core.ninethFeeComboBox.addActionListener(e -> {
+            //Update fee value based on selection of feeComboBox
+            if (core.ninethFeeComboBox.getSelectedItem() != null) {
+                core.ninethFeeTxt.setText(fees.getFeeAmount(core.ninethFeeComboBox.getSelectedItem().toString()));
+            } else if (core.ninethFeeComboBox.getSelectedItem() == null) {
+                core.ninethFeeTxt.setText("");
+            }
+        });
+        core.tenthFeeComboBox.addActionListener(e -> {
+            //Update fee value based on selection of feeComboBox
+            if (core.tenthFeeComboBox.getSelectedItem() != null) {
+                core.tenthFeeTxt.setText(fees.getFeeAmount(core.tenthFeeComboBox.getSelectedItem().toString()));
+            } else if (core.tenthFeeComboBox.getSelectedItem() == null) {
+                core.tenthFeeTxt.setText("");
+            }
+        });
     }
 
     public static void fillFeesDateInCore() {
@@ -300,6 +373,61 @@ public class fees {
                 core.fifthFeeDateTxt.setText("");
             }
         });
+        core.sixthFeeComboBox.addActionListener(e -> {
+            if (core.sixthFeeComboBox.getSelectedItem() == null) {
+                return;
+            }
+            if (core.sixthFeeComboBox.getSelectedItem() != null && core.sixthFeeDateTxt.getText().equals("")) {
+                core.sixthFeeDateTxt.setText(date.today());
+            } else if (core.sixthFeeComboBox.getSelectedItem().equals("")) {
+                core.sixthFeeComboBox.setSelectedIndex(-1);
+                core.sixthFeeDateTxt.setText("");
+            }
+        });
+        core.seventhFeeComboBox.addActionListener(e -> {
+            if (core.seventhFeeComboBox.getSelectedItem() == null) {
+                return;
+            }
+            if (core.seventhFeeComboBox.getSelectedItem() != null && core.seventhFeeDateTxt.getText().equals("")) {
+                core.seventhFeeDateTxt.setText(date.today());
+            } else if (core.seventhFeeComboBox.getSelectedItem().equals("")) {
+                core.seventhFeeComboBox.setSelectedIndex(-1);
+                core.seventhFeeDateTxt.setText("");
+            }
+        });
+        core.eighthFeeComboBox.addActionListener(e -> {
+            if (core.eighthFeeComboBox.getSelectedItem() == null) {
+                return;
+            }
+            if (core.eighthFeeComboBox.getSelectedItem() != null && core.eighthFeeDateTxt.getText().equals("")) {
+                core.eighthFeeDateTxt.setText(date.today());
+            } else if (core.eighthFeeComboBox.getSelectedItem().equals("")) {
+                core.eighthFeeComboBox.setSelectedIndex(-1);
+                core.eighthFeeDateTxt.setText("");
+            }
+        });
+        core.ninethFeeComboBox.addActionListener(e -> {
+            if (core.ninethFeeComboBox.getSelectedItem() == null) {
+                return;
+            }
+            if (core.ninethFeeComboBox.getSelectedItem() != null && core.ninethFeeDateTxt.getText().equals("")) {
+                core.ninethFeeDateTxt.setText(date.today());
+            } else if (core.ninethFeeComboBox.getSelectedItem().equals("")) {
+                core.ninethFeeComboBox.setSelectedIndex(-1);
+                core.ninethFeeDateTxt.setText("");
+            }
+        });
+        core.tenthFeeComboBox.addActionListener(e -> {
+            if (core.tenthFeeComboBox.getSelectedItem() == null) {
+                return;
+            }
+            if (core.tenthFeeComboBox.getSelectedItem() != null && core.tenthFeeDateTxt.getText().equals("")) {
+                core.tenthFeeDateTxt.setText(date.today());
+            } else if (core.tenthFeeComboBox.getSelectedItem().equals("")) {
+                core.tenthFeeComboBox.setSelectedIndex(-1);
+                core.tenthFeeDateTxt.setText("");
+            }
+        });
     }
 
     public static void updateFeesDropDownInCore() {
@@ -322,6 +450,26 @@ public class fees {
         int fifthFeeSelectedIndex = core.fifthFeeComboBox.getSelectedIndex();
         core.fifthFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
         core.fifthFeeComboBox.setSelectedIndex(fifthFeeSelectedIndex);
+
+        int sixthFeeSelectedIndex = core.sixthFeeComboBox.getSelectedIndex();
+        core.sixthFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.sixthFeeComboBox.setSelectedIndex(sixthFeeSelectedIndex);
+
+        int seventhFeeSelectedIndex = core.sixthFeeComboBox.getSelectedIndex();
+        core.sixthFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.sixthFeeComboBox.setSelectedIndex(seventhFeeSelectedIndex);
+
+        int eighthFeeSelectedIndex = core.eighthFeeComboBox.getSelectedIndex();
+        core.eighthFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.eighthFeeComboBox.setSelectedIndex(eighthFeeSelectedIndex);
+
+        int ninethFeeSelectedIndex = core.ninethFeeComboBox.getSelectedIndex();
+        core.ninethFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.ninethFeeComboBox.setSelectedIndex(ninethFeeSelectedIndex);
+
+        int tenthFeeSelectedIndex = core.tenthFeeComboBox.getSelectedIndex();
+        core.tenthFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.tenthFeeComboBox.setSelectedIndex(tenthFeeSelectedIndex);
     }
 
 }

@@ -43,8 +43,23 @@ public class core extends JFrame implements ActionListener {
     public static JComboBox<String> fifthFeeComboBox;
     public static JTextField fifthFeeTxt;
     public static JTextField fifthFeeDateTxt;
+    public static JComboBox<String> sixthFeeComboBox;
+    public static JTextField sixthFeeTxt;
+    public static JTextField sixthFeeDateTxt;
+    public static JComboBox<String> seventhFeeComboBox;
+    public static JTextField seventhFeeTxt;
+    public static JTextField seventhFeeDateTxt;
+    public static JComboBox<String> eighthFeeComboBox;
+    public static JTextField eighthFeeTxt;
+    public static JTextField eighthFeeDateTxt;
+    public static JComboBox<String> ninethFeeComboBox;
+    public static JTextField ninethFeeTxt;
+    public static JTextField ninethFeeDateTxt;
+    public static JComboBox<String> tenthFeeComboBox;
+    public static JTextField tenthFeeTxt;
+    public static JTextField tenthFeeDateTxt;
     JTextField RNCTxt;
-    JTextField NCFTxt;
+    public static JTextField NCFTxt;
     JTextField dateTxt;
     JTextField expirationDateTxt;
     JButton addClientButton;
@@ -76,6 +91,11 @@ public class core extends JFrame implements ActionListener {
         createThirdFeePanel();
         createForthFeePanel();
         createFifthFeePanel();
+        createSixthFeePanel();
+        createSeventhFeePanel();
+        createEighthFeePanel();
+        createNinethFeePanel();
+        createTenthFeePanel();
 
         // Add the panel to the frame and display the GUI
         add(panel);
@@ -271,6 +291,96 @@ public class core extends JFrame implements ActionListener {
         panel.add(feesPanel);
     }
 
+    private void createSixthFeePanel() {
+        JPanel feesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        feesPanel.add(new JLabel("Concepto a facturar:"));
+
+        sixthFeeComboBox = new JComboBox<>(fees.getAllKeysFromJson().toArray(new String[0]));
+        sixthFeeComboBox.setSelectedIndex(-1);
+        feesPanel.add(sixthFeeComboBox);
+        sixthFeeComboBox.setEditable(true);
+        sixthFeeTxt = fees.fillFeeValueInCore(sixthFeeComboBox);
+        feesPanel.add(sixthFeeTxt);
+        feesPanel.add(new JLabel("Fecha del importe"));
+        sixthFeeDateTxt = new JTextField(10);
+        feesPanel.add(sixthFeeDateTxt);
+
+        panel.add(feesPanel);
+    }
+
+    private void createSeventhFeePanel() {
+        JPanel feesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        feesPanel.add(new JLabel("Concepto a facturar:"));
+
+        seventhFeeComboBox = new JComboBox<>(fees.getAllKeysFromJson().toArray(new String[0]));
+        seventhFeeComboBox.setSelectedIndex(-1);
+        feesPanel.add(seventhFeeComboBox);
+        seventhFeeComboBox.setEditable(true);
+        seventhFeeTxt = fees.fillFeeValueInCore(seventhFeeComboBox);
+        feesPanel.add(seventhFeeTxt);
+        feesPanel.add(new JLabel("Fecha del importe"));
+        seventhFeeDateTxt = new JTextField(10);
+        feesPanel.add(seventhFeeDateTxt);
+
+        panel.add(feesPanel);
+    }
+
+    private void createEighthFeePanel() {
+        JPanel feesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        feesPanel.add(new JLabel("Concepto a facturar:"));
+
+        eighthFeeComboBox = new JComboBox<>(fees.getAllKeysFromJson().toArray(new String[0]));
+        eighthFeeComboBox.setSelectedIndex(-1);
+        feesPanel.add(eighthFeeComboBox);
+        eighthFeeComboBox.setEditable(true);
+        eighthFeeTxt = fees.fillFeeValueInCore(eighthFeeComboBox);
+        feesPanel.add(eighthFeeTxt);
+        feesPanel.add(new JLabel("Fecha del importe"));
+        eighthFeeDateTxt = new JTextField(10);
+        feesPanel.add(eighthFeeDateTxt);
+
+        panel.add(feesPanel);
+    }
+
+    private void createNinethFeePanel() {
+        JPanel feesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        feesPanel.add(new JLabel("Concepto a facturar:"));
+
+        ninethFeeComboBox = new JComboBox<>(fees.getAllKeysFromJson().toArray(new String[0]));
+        ninethFeeComboBox.setSelectedIndex(-1);
+        feesPanel.add(ninethFeeComboBox);
+        ninethFeeComboBox.setEditable(true);
+        ninethFeeTxt = fees.fillFeeValueInCore(ninethFeeComboBox);
+        feesPanel.add(ninethFeeTxt);
+        feesPanel.add(new JLabel("Fecha del importe"));
+        ninethFeeDateTxt = new JTextField(10);
+        feesPanel.add(ninethFeeDateTxt);
+
+        panel.add(feesPanel);
+    }
+
+    private void createTenthFeePanel() {
+        JPanel feesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        feesPanel.add(new JLabel("Concepto a facturar:"));
+
+        tenthFeeComboBox = new JComboBox<>(fees.getAllKeysFromJson().toArray(new String[0]));
+        tenthFeeComboBox.setSelectedIndex(-1);
+        feesPanel.add(tenthFeeComboBox);
+        tenthFeeComboBox.setEditable(true);
+        tenthFeeTxt = fees.fillFeeValueInCore(tenthFeeComboBox);
+        feesPanel.add(tenthFeeTxt);
+        feesPanel.add(new JLabel("Fecha del importe"));
+        tenthFeeDateTxt = new JTextField(10);
+        feesPanel.add(tenthFeeDateTxt);
+
+        panel.add(feesPanel);
+    }
+
     private void createButtonsPanel() {
         generateButtom = new JButton("Generar factura");
         generateButtom.addActionListener(this);
@@ -308,6 +418,11 @@ public class core extends JFrame implements ActionListener {
         Map<String, Map<String, String>> thirdFeeMap = new HashMap<>();
         Map<String, Map<String, String>> forthFeeMap = new HashMap<>();
         Map<String, Map<String, String>> fifthFeeMap = new HashMap<>();
+        Map<String, Map<String, String>> sixthFeeMap = new HashMap<>();
+        Map<String, Map<String, String>> seventhFeeMap = new HashMap<>();
+        Map<String, Map<String, String>> eighthFeeMap = new HashMap<>();
+        Map<String, Map<String, String>> ninethFeeMap = new HashMap<>();
+        Map<String, Map<String, String>> tenthFeeMap = new HashMap<>();
         Map<Object, Object> finalData = new HashMap<>();
 
 
@@ -374,7 +489,6 @@ public class core extends JFrame implements ActionListener {
         } catch (NullPointerException ignore) {
         }
 
-
         try {
             if (!fifthFeeComboBox.getSelectedItem().toString().equals("")) {
                 Map<String, String> fifthFeeData = new HashMap<>();
@@ -382,6 +496,61 @@ public class core extends JFrame implements ActionListener {
                 fifthFeeData.put("Monto: ", fifthFeeTxt.getText());
                 fifthFeeData.put("Fecha: ", fifthFeeDateTxt.getText());
                 fifthFeeMap.put("QUINTO HONORARIO:", fifthFeeData);
+            }
+        } catch (NullPointerException ignore) {
+        }
+
+        try {
+            if (!sixthFeeComboBox.getSelectedItem().toString().equals("")) {
+                Map<String, String> sixthFeeData = new HashMap<>();
+                sixthFeeData.put("Razon: ", sixthFeeComboBox.getSelectedItem().toString());
+                sixthFeeData.put("Monto: ", sixthFeeTxt.getText());
+                sixthFeeData.put("Fecha: ", sixthFeeDateTxt.getText());
+                sixthFeeMap.put("SEXTO HONORARIO:", sixthFeeData);
+            }
+        } catch (NullPointerException ignore) {
+        }
+
+        try {
+            if (!seventhFeeComboBox.getSelectedItem().toString().equals("")) {
+                Map<String, String> seventhFeeData = new HashMap<>();
+                seventhFeeData.put("Razon: ", seventhFeeComboBox.getSelectedItem().toString());
+                seventhFeeData.put("Monto: ", seventhFeeTxt.getText());
+                seventhFeeData.put("Fecha: ", seventhFeeDateTxt.getText());
+                seventhFeeMap.put("SEPTIMO HONORARIO:", seventhFeeData);
+            }
+        } catch (NullPointerException ignore) {
+        }
+
+        try {
+            if (!eighthFeeComboBox.getSelectedItem().toString().equals("")) {
+                Map<String, String> eighthFeeData = new HashMap<>();
+                eighthFeeData.put("Razon: ", eighthFeeComboBox.getSelectedItem().toString());
+                eighthFeeData.put("Monto: ", eighthFeeTxt.getText());
+                eighthFeeData.put("Fecha: ", eighthFeeDateTxt.getText());
+                eighthFeeMap.put("OCTAVO HONORARIO:", eighthFeeData);
+            }
+        } catch (NullPointerException ignore) {
+        }
+
+        try {
+            if (!ninethFeeComboBox.getSelectedItem().toString().equals("")) {
+                Map<String, String> ninethFeeData = new HashMap<>();
+                ninethFeeData.put("Razon: ", ninethFeeComboBox.getSelectedItem().toString());
+                ninethFeeData.put("Monto: ", ninethFeeTxt.getText());
+                ninethFeeData.put("Fecha: ", ninethFeeDateTxt.getText());
+                ninethFeeMap.put("NOVENO HONORARIO:", ninethFeeData);
+            }
+        } catch (NullPointerException ignore) {
+        }
+
+        try {
+            if (!tenthFeeComboBox.getSelectedItem().toString().equals("")) {
+                Map<String, String> tenthFeeData = new HashMap<>();
+                tenthFeeData.put("Razon: ", tenthFeeComboBox.getSelectedItem().toString());
+                tenthFeeData.put("Monto: ", tenthFeeTxt.getText());
+                tenthFeeData.put("Fecha: ", tenthFeeDateTxt.getText());
+                tenthFeeMap.put("DECIMO HONORARIO:", tenthFeeData);
             }
         } catch (NullPointerException ignore) {
         }
@@ -408,7 +577,26 @@ public class core extends JFrame implements ActionListener {
             finalData.putAll(fifthFeeMap);
         }
 
+        if (!sixthFeeMap.isEmpty()) {
+            finalData.putAll(sixthFeeMap);
+        }
+
+        if (!seventhFeeMap.isEmpty()) {
+            finalData.putAll(seventhFeeMap);
+        }
+
+        if (!eighthFeeMap.isEmpty()) {
+            finalData.putAll(eighthFeeMap);
+        }
+
+        if (!ninethFeeMap.isEmpty()) {
+            finalData.putAll(ninethFeeMap);
+        }
+
+        if (!tenthFeeMap.isEmpty()) {
+            finalData.putAll(tenthFeeMap);
+        }
+
         jsonHandler.writeOnFinalJson(finalData);
-        NCFTxt.setText(ncf.getLastNCF());
     }
 }

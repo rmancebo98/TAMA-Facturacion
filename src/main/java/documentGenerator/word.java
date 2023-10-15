@@ -130,7 +130,21 @@ public class word {
         Map<String, String> thirdFee = readReceiptJson().get("TERCER HONORARIO:");
         Map<String, String> forthFee = readReceiptJson().get("CUARTO HONORARIO:");
         Map<String, String> fifthFee = readReceiptJson().get("QUINTO HONORARIO:");
+        Map<String, String> sixthFee = readReceiptJson().get("SEXTO HONORARIO:");
+        Map<String, String> seventhFee = readReceiptJson().get("SEPTIMO HONORARIO:");
+        Map<String, String> eighthFee = readReceiptJson().get("OCTAVO HONORARIO:");
+        Map<String, String> ninethFee = readReceiptJson().get("NOVENO HONORARIO:");
+        Map<String, String> tenthFee = readReceiptJson().get("DECIMO HONORARIO:");
         XWPFTable table = document.getTables().get(0);
+        Boolean deleteSecond = false;
+        Boolean deleteThird = false;
+        Boolean deleteForth = false;
+        Boolean deleteFifth = false;
+        Boolean deleteSixth = false;
+        Boolean deleteSeventh = false;
+        Boolean deleteEighth = false;
+        Boolean deleteNineth = false;
+        Boolean deleteTenth = false;
 
         //fill first fee
         // Fill concept
@@ -157,6 +171,8 @@ public class word {
             table.getRow(2).getCell(3).setText(maths.getITBIS(secondFee.get("Monto: ")));
             //Fill amount with ITBIS
             table.getRow(2).getCell(4).setText(maths.getAmountWithITBIS(secondFee.get("Monto: ")));
+        } else {
+            deleteSecond = true;
         }
 
         //fill third fee
@@ -171,6 +187,8 @@ public class word {
             table.getRow(3).getCell(3).setText(maths.getITBIS(thirdFee.get("Monto: ")));
             //Fill amount with ITBIS
             table.getRow(3).getCell(4).setText(maths.getAmountWithITBIS(thirdFee.get("Monto: ")));
+        } else {
+            deleteThird = true;
         }
 
         //fill forth fee
@@ -185,6 +203,8 @@ public class word {
             table.getRow(4).getCell(3).setText(maths.getITBIS(forthFee.get("Monto: ")));
             //Fill amount with ITBIS
             table.getRow(4).getCell(4).setText(maths.getAmountWithITBIS(forthFee.get("Monto: ")));
+        } else {
+            deleteForth = true;
         }
 
         //fill fifth fee
@@ -199,16 +219,132 @@ public class word {
             table.getRow(5).getCell(3).setText(maths.getITBIS(fifthFee.get("Monto: ")));
             //Fill amount with ITBIS
             table.getRow(5).getCell(4).setText(maths.getAmountWithITBIS(fifthFee.get("Monto: ")));
+        } else {
+            deleteFifth = true;
+        }
+
+        //fill sixth fee
+        if (sixthFee != null) {
+            // Fill concept
+            table.getRow(6).getCell(0).setText(sixthFee.get("Razon: "));
+            //Fill date
+            table.getRow(6).getCell(1).setText(sixthFee.get("Fecha: "));
+            //Fill amount
+            table.getRow(6).getCell(2).setText(sixthFee.get("Monto: "));
+            //Fill ITBIS
+            table.getRow(6).getCell(3).setText(maths.getITBIS(sixthFee.get("Monto: ")));
+            //Fill amount with ITBIS
+            table.getRow(6).getCell(4).setText(maths.getAmountWithITBIS(sixthFee.get("Monto: ")));
+        } else {
+            deleteSixth = true;
+        }
+
+        //fill sixth fee
+        if (seventhFee != null) {
+            // Fill concept
+            table.getRow(7).getCell(0).setText(seventhFee.get("Razon: "));
+            //Fill date
+            table.getRow(7).getCell(1).setText(seventhFee.get("Fecha: "));
+            //Fill amount
+            table.getRow(7).getCell(2).setText(seventhFee.get("Monto: "));
+            //Fill ITBIS
+            table.getRow(7).getCell(3).setText(maths.getITBIS(seventhFee.get("Monto: ")));
+            //Fill amount with ITBIS
+            table.getRow(7).getCell(4).setText(maths.getAmountWithITBIS(seventhFee.get("Monto: ")));
+        } else {
+            deleteSeventh = true;
+        }
+
+        //fill sixth fee
+        if (eighthFee != null) {
+            // Fill concept
+            table.getRow(8).getCell(0).setText(eighthFee.get("Razon: "));
+            //Fill date
+            table.getRow(8).getCell(1).setText(eighthFee.get("Fecha: "));
+            //Fill amount
+            table.getRow(8).getCell(2).setText(eighthFee.get("Monto: "));
+            //Fill ITBIS
+            table.getRow(8).getCell(3).setText(maths.getITBIS(eighthFee.get("Monto: ")));
+            //Fill amount with ITBIS
+            table.getRow(8).getCell(4).setText(maths.getAmountWithITBIS(eighthFee.get("Monto: ")));
+        } else {
+            deleteEighth = true;
+        }
+
+        if (ninethFee != null) {
+            // Fill concept
+            table.getRow(9).getCell(0).setText(ninethFee.get("Razon: "));
+            //Fill date
+            table.getRow(9).getCell(1).setText(ninethFee.get("Fecha: "));
+            //Fill amount
+            table.getRow(9).getCell(2).setText(ninethFee.get("Monto: "));
+            //Fill ITBIS
+            table.getRow(9).getCell(3).setText(maths.getITBIS(ninethFee.get("Monto: ")));
+            //Fill amount with ITBIS
+            table.getRow(9).getCell(4).setText(maths.getAmountWithITBIS(ninethFee.get("Monto: ")));
+        } else {
+            deleteNineth = true;
+        }
+
+        if (tenthFee != null) {
+            // Fill concept
+            table.getRow(10).getCell(0).setText(tenthFee.get("Razon: "));
+            //Fill date
+            table.getRow(10).getCell(1).setText(tenthFee.get("Fecha: "));
+            //Fill amount
+            table.getRow(10).getCell(2).setText(tenthFee.get("Monto: "));
+            //Fill ITBIS
+            table.getRow(10).getCell(3).setText(maths.getITBIS(tenthFee.get("Monto: ")));
+            //Fill amount with ITBIS
+            table.getRow(10).getCell(4).setText(maths.getAmountWithITBIS(tenthFee.get("Monto: ")));
+        } else {
+            deleteTenth = true;
+        }
+
+
+        if (deleteTenth) {
+            table.removeRow(10);
+        }
+        if (deleteNineth) {
+            table.removeRow(9);
+        }
+        if (deleteEighth) {
+            table.removeRow(8);
+        }
+        if (deleteSeventh) {
+            table.removeRow(7);
+        }
+        if (deleteSixth) {
+            table.removeRow(6);
+        }
+        if (deleteFifth) {
+            table.removeRow(5);
+        }
+        if (deleteForth) {
+            table.removeRow(4);
+        }
+        if (deleteThird) {
+            table.removeRow(3);
+        }
+        if (deleteSecond) {
+            table.removeRow(2);
         }
 
         //Fill totals
-        table.getRow(6).getCell(2).setText(sumAllValues(amounts));
-        table.getRow(6).getCell(3).setText(sumAllValues(ITBIS));
-        table.getRow(6).getCell(4).setText(sumAllValues(amounts, ITBIS));
+        if (table.getNumberOfRows() != 5) {
+            table.getRow(table.getNumberOfRows() - 3).getCell(2).setText(sumAllValues(amounts));
+            table.getRow(table.getNumberOfRows() - 3).getCell(3).setText(sumAllValues(ITBIS));
+            table.getRow(table.getNumberOfRows() - 3).getCell(4).setText(sumAllValues(amounts, ITBIS));
+        } else {
+            sumAllValues(amounts);
+            sumAllValues(ITBIS);
+            sumAllValues(amounts, ITBIS);
+            table.removeRow(table.getNumberOfRows() - 3);
+        }
         //Fill 30% row
-        table.getRow(7).getCell(4).setText(calculateMapfreRetention());
+        table.getRow(table.getNumberOfRows() - 2).getCell(4).setText(calculateMapfreRetention());
         //Fill total to pay
-        table.getRow(8).getCell(4).setText(formatter.formatIntoMoney(plainTotal - mapfreRetention));
+        table.getRow(table.getNumberOfRows() - 1).getCell(4).setText(formatter.formatIntoMoney(plainTotal - mapfreRetention));
 
     }
 
