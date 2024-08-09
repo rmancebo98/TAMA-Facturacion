@@ -19,16 +19,17 @@ public class jsonHandler {
 
         // Write the modified map back to the JSON file
         int result =
-                JOptionPane.showConfirmDialog(null, "Esta seguro que desea generar la factura?"
+                JOptionPane.showConfirmDialog(null, "Está seguro que desea generar la factura?"
                         , "Generar factura?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
         if (result == JOptionPane.YES_OPTION) {
             try {
                 mapper.writeValue(new File(core.sourceFolder + "/json/factura.json"), data);
+                excel.writeOnExcel();
                 word.writeOnWord();
                 notifications.showPopUpNotification("Factura creada", "Operación exitosa");
                 core.NCFTxt.setText(ncf.getLastNCF());
-            } catch (IOException | InvalidFormatException ex) {
+            } catch (IOException ex) {
                 notifications.showErrorNotification("Error guardando informacion");
                 ex.printStackTrace();
             }

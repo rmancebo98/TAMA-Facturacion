@@ -3,6 +3,7 @@ package util;
 public class format {
     public static String formatAsMoney(String amount) {
         String formattedAmount;
+        amount = amount.replaceAll("[^\\d.]", "");
 
         if (amount.contains("$") && !amount.contains(".")) {
             amount = amount.replace("$", "");

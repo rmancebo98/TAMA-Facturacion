@@ -4,12 +4,14 @@ import clients.clients;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import documentGenerator.jsonHandler;
 import fees.fees;
+import settings.settings;
 import util.date;
 import util.formatter;
 import util.ncf;
 import util.notifications;
 
 import javax.swing.*;
+import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -64,6 +66,7 @@ public class core extends JFrame implements ActionListener {
     JTextField expirationDateTxt;
     JButton addClientButton;
     JButton addFeesButton;
+    JButton settingsButton;
     public static String sourceFolder;
 
     public static void main(String[] args) {
@@ -72,10 +75,9 @@ public class core extends JFrame implements ActionListener {
     }
 
     public core() {
-        super("Tavarez y Mancebo - Sistema de facturación");
+        super("Tavárez y Mancebo - Sistema de facturación");
         createReceiptWindow();
     }
-
 
     public void createReceiptWindow() {
 
@@ -96,6 +98,7 @@ public class core extends JFrame implements ActionListener {
         createEighthFeePanel();
         createNinethFeePanel();
         createTenthFeePanel();
+        panel.add(new TextFieldPopup());
 
         // Add the panel to the frame and display the GUI
         add(panel);
@@ -209,6 +212,7 @@ public class core extends JFrame implements ActionListener {
         feesPanel.add(firstFeeComboBox);
         firstFeeTxt = fees.fillFeeValueInCore(firstFeeComboBox);
         feesPanel.add(firstFeeTxt);
+        formatter.setNumericOnly(firstFeeTxt);
         JLabel firstFeeDateLbl = new JLabel("Fecha del importe");
         feesPanel.add(firstFeeDateLbl);
         firstFeeDateTxt = new JTextField(date.today(), 10);
@@ -228,6 +232,7 @@ public class core extends JFrame implements ActionListener {
         feesPanel.add(secondFeeComboBox);
         secondFeeTxt = fees.fillFeeValueInCore(secondFeeComboBox);
         feesPanel.add(secondFeeTxt);
+        formatter.setNumericOnly(secondFeeTxt);
         feesPanel.add(new JLabel("Fecha del importe"));
         secondFeeDateTxt = new JTextField(10);
         feesPanel.add(secondFeeDateTxt);
@@ -246,6 +251,7 @@ public class core extends JFrame implements ActionListener {
         feesPanel.add(thirdFeeComboBox);
         thirdFeeTxt = fees.fillFeeValueInCore(thirdFeeComboBox);
         feesPanel.add(thirdFeeTxt);
+        formatter.setNumericOnly(thirdFeeTxt);
         feesPanel.add(new JLabel("Fecha del importe"));
         thirdFeeDateTxt = new JTextField(10);
         feesPanel.add(thirdFeeDateTxt);
@@ -265,6 +271,7 @@ public class core extends JFrame implements ActionListener {
         feesPanel.add(forthFeeComboBox);
         forthFeeTxt = fees.fillFeeValueInCore(forthFeeComboBox);
         feesPanel.add(forthFeeTxt);
+        formatter.setNumericOnly(forthFeeTxt);
         feesPanel.add(new JLabel("Fecha del importe"));
         forthFeeDateTxt = new JTextField(10);
         feesPanel.add(forthFeeDateTxt);
@@ -284,6 +291,7 @@ public class core extends JFrame implements ActionListener {
         fifthFeeComboBox.setEditable(true);
         fifthFeeTxt = fees.fillFeeValueInCore(fifthFeeComboBox);
         feesPanel.add(fifthFeeTxt);
+        formatter.setNumericOnly(fifthFeeTxt);
         feesPanel.add(new JLabel("Fecha del importe"));
         fifthFeeDateTxt = new JTextField(10);
         feesPanel.add(fifthFeeDateTxt);
@@ -302,6 +310,7 @@ public class core extends JFrame implements ActionListener {
         sixthFeeComboBox.setEditable(true);
         sixthFeeTxt = fees.fillFeeValueInCore(sixthFeeComboBox);
         feesPanel.add(sixthFeeTxt);
+        formatter.setNumericOnly(sixthFeeTxt);
         feesPanel.add(new JLabel("Fecha del importe"));
         sixthFeeDateTxt = new JTextField(10);
         feesPanel.add(sixthFeeDateTxt);
@@ -320,6 +329,7 @@ public class core extends JFrame implements ActionListener {
         seventhFeeComboBox.setEditable(true);
         seventhFeeTxt = fees.fillFeeValueInCore(seventhFeeComboBox);
         feesPanel.add(seventhFeeTxt);
+        formatter.setNumericOnly(seventhFeeTxt);
         feesPanel.add(new JLabel("Fecha del importe"));
         seventhFeeDateTxt = new JTextField(10);
         feesPanel.add(seventhFeeDateTxt);
@@ -338,6 +348,7 @@ public class core extends JFrame implements ActionListener {
         eighthFeeComboBox.setEditable(true);
         eighthFeeTxt = fees.fillFeeValueInCore(eighthFeeComboBox);
         feesPanel.add(eighthFeeTxt);
+        formatter.setNumericOnly(eighthFeeTxt);
         feesPanel.add(new JLabel("Fecha del importe"));
         eighthFeeDateTxt = new JTextField(10);
         feesPanel.add(eighthFeeDateTxt);
@@ -356,6 +367,7 @@ public class core extends JFrame implements ActionListener {
         ninethFeeComboBox.setEditable(true);
         ninethFeeTxt = fees.fillFeeValueInCore(ninethFeeComboBox);
         feesPanel.add(ninethFeeTxt);
+        formatter.setNumericOnly(ninethFeeTxt);
         feesPanel.add(new JLabel("Fecha del importe"));
         ninethFeeDateTxt = new JTextField(10);
         feesPanel.add(ninethFeeDateTxt);
@@ -374,6 +386,7 @@ public class core extends JFrame implements ActionListener {
         tenthFeeComboBox.setEditable(true);
         tenthFeeTxt = fees.fillFeeValueInCore(tenthFeeComboBox);
         feesPanel.add(tenthFeeTxt);
+        formatter.setNumericOnly(tenthFeeTxt);
         feesPanel.add(new JLabel("Fecha del importe"));
         tenthFeeDateTxt = new JTextField(10);
         feesPanel.add(tenthFeeDateTxt);
@@ -397,11 +410,17 @@ public class core extends JFrame implements ActionListener {
             fees.showFrame();
         });
 
+        settingsButton = new JButton("Configuración");
+        settingsButton.addActionListener(e -> {
+            settings.showFrame();
+        });
+
         // Create a panel to hold the buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.add(generateButtom);
         buttonPanel.add(addClientButton);
         buttonPanel.add(addFeesButton);
+        buttonPanel.add(settingsButton);
 
         // Add the button panel to the main panel
         panel.add(buttonPanel);
@@ -599,4 +618,56 @@ public class core extends JFrame implements ActionListener {
 
         jsonHandler.writeOnFinalJson(finalData);
     }
+
+    public class TextFieldPopup extends JPanel {
+        public TextFieldPopup() {
+            JPopupMenu menu = new JPopupMenu();
+            Action cut = new DefaultEditorKit.CutAction();
+            cut.putValue(Action.NAME, "Cut");
+            cut.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control X"));
+            menu.add(cut);
+
+            Action copy = new DefaultEditorKit.CopyAction();
+            copy.putValue(Action.NAME, "Copy");
+            copy.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control C"));
+            menu.add(copy);
+
+            Action paste = new DefaultEditorKit.PasteAction();
+            paste.putValue(Action.NAME, "Paste");
+            paste.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control V"));
+            menu.add(paste);
+
+            dateTxt.setComponentPopupMenu(menu);
+            expirationDateTxt.setComponentPopupMenu(menu);
+            RNCTxt.setComponentPopupMenu(menu);
+            NCFTxt.setComponentPopupMenu(menu);
+            clientRNC.setComponentPopupMenu(menu);
+            insuredName.setComponentPopupMenu(menu);
+            clientAddress.setComponentPopupMenu(menu);
+            caseNumber.setComponentPopupMenu(menu);
+
+            firstFeeTxt.setComponentPopupMenu(menu);
+            firstFeeDateTxt.setComponentPopupMenu(menu);
+            secondFeeTxt.setComponentPopupMenu(menu);
+            secondFeeDateTxt.setComponentPopupMenu(menu);
+            thirdFeeTxt.setComponentPopupMenu(menu);
+            thirdFeeDateTxt.setComponentPopupMenu(menu);
+            forthFeeTxt.setComponentPopupMenu(menu);
+            forthFeeDateTxt.setComponentPopupMenu(menu);
+            fifthFeeTxt.setComponentPopupMenu(menu);
+            fifthFeeDateTxt.setComponentPopupMenu(menu);
+            sixthFeeTxt.setComponentPopupMenu(menu);
+            sixthFeeDateTxt.setComponentPopupMenu(menu);
+            seventhFeeTxt.setComponentPopupMenu(menu);
+            seventhFeeDateTxt.setComponentPopupMenu(menu);
+            eighthFeeTxt.setComponentPopupMenu(menu);
+            eighthFeeDateTxt.setComponentPopupMenu(menu);
+            ninethFeeTxt.setComponentPopupMenu(menu);
+            ninethFeeDateTxt.setComponentPopupMenu(menu);
+            tenthFeeTxt.setComponentPopupMenu(menu);
+            tenthFeeDateTxt.setComponentPopupMenu(menu);
+        }
+
+    }
+
 }

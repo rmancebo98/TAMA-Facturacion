@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class fees {
 
@@ -90,7 +91,7 @@ public class fees {
         Map data = null;
 
         try {
-            data = mapper.readValue(new File(feesPath), Map.class);
+            data = mapper.readValue(new File(feesPath), TreeMap.class);
         } catch (IOException ex) {
             // If the file doesn't exist, create a new empty map
             data = new HashMap<String, String>();

@@ -9,7 +9,7 @@ import java.text.NumberFormat;
 
 public class formatter {
 
-    public static String    formatIntoMoney(double amount) {
+    public static String formatIntoMoney(double amount) {
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
         return formatter.format(amount);
     }
