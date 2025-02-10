@@ -13,7 +13,8 @@ public class ncf {
 
     public static String getLastNCF() {
         // Get a value from the JSON object by its key
-        Map<String, Map<String, String>> receiptJson = readReceiptJson();
+        Map<String, Map<String, String>> receiptJson = readJson("/json/factura.json",
+                "Error generando documento");
         Map<String, String> generalInfo = receiptJson.get("INFORMACION GENERAL");
         String currentNFC = generalInfo.get("Numero de Comprobante Fiscal");
         if (currentNFC.equals("")) {
@@ -31,16 +32,41 @@ public class ncf {
         }
     }
 
-    public static Map<String, Map<String, String>> readReceiptJson() {
+    public static String getMaxNCF() {
+        Map<String, Map<String, String>> receiptJson = readJson("/json/config.json", "Error leyendo configuraciones");
+        Map<String, String> generalInfo = receiptJson.get("NCF");
+        String currentNFC = generalInfo.get("maxNCF");
+        if (currentNFC.equals("")) {
+            return NCF;
+        }
+        String numericPart = currentNFC.substring(3);
+
+        // Extract numeric part
+        long formattedNumber = Long.parseLong(numericPart);
+
+        // Combinar el prefijo "B01" con el valor numérico
+        NCF = "B01" + String.format("%08d", formattedNumber);
+
+        return NCF;
+
+    }
+
+    public static Map<String, Map<String, String>> readJson(String path, String errorMsg) {
         ObjectMapper mapper = new ObjectMapper();
         Map data = null;
 
         try {
-            data = mapper.readValue(new File(core.sourceFolder + "/json/factura.json"), Map.class);
+            data = mapper.readValue(new File(core.sourceFolder + path), Map.class);
         } catch (IOException ex) {
             ex.printStackTrace();
-            notifications.showErrorNotification("Error generando documento");
+            notifications.showErrorNotification(errorMsg);
         }
         return data;
+    }
+
+    public static Boolean ncfCloseToMax() {
+        long max = Long.parseLong(getMaxNCF().substring(3));
+        long current = Long.parseLong(getLastNCF().substring(3)) - 1;
+        return max - current <= 5;
     }
 }

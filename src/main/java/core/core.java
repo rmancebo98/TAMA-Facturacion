@@ -60,6 +60,9 @@ public class core extends JFrame implements ActionListener {
     public static JComboBox<String> tenthFeeComboBox;
     public static JTextField tenthFeeTxt;
     public static JTextField tenthFeeDateTxt;
+    public static JComboBox<String> eleventhFeeComboBox;
+    public static JTextField eleventhFeeTxt;
+    public static JTextField eleventhFeeDateTxt;
     JTextField RNCTxt;
     public static JTextField NCFTxt;
     JTextField dateTxt;
@@ -98,6 +101,7 @@ public class core extends JFrame implements ActionListener {
         createEighthFeePanel();
         createNinethFeePanel();
         createTenthFeePanel();
+        createEleventhFeePanel();
         panel.add(new TextFieldPopup());
 
         // Add the panel to the frame and display the GUI
@@ -143,6 +147,10 @@ public class core extends JFrame implements ActionListener {
         }
         formatter.setNumericOnly(NCFTxt);
         rncPanel.add(NCFTxt);
+
+        if(ncf.ncfCloseToMax()) {
+            rncPanel.add(new JLabel("Comprobantes cerca de expirar!")).setForeground(Color.RED);
+        }
 
         // Add the button panel to the main panel
         mainPanel.add(rncPanel);
@@ -394,6 +402,25 @@ public class core extends JFrame implements ActionListener {
         panel.add(feesPanel);
     }
 
+    private void createEleventhFeePanel() {
+        JPanel feesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        feesPanel.add(new JLabel("Concepto a facturar:"));
+
+        eleventhFeeComboBox = new JComboBox<>(fees.getAllKeysFromJson().toArray(new String[0]));
+        eleventhFeeComboBox.setSelectedIndex(-1);
+        feesPanel.add(eleventhFeeComboBox);
+        eleventhFeeComboBox.setEditable(true);
+        eleventhFeeTxt = fees.fillFeeValueInCore(eleventhFeeComboBox);
+        feesPanel.add(eleventhFeeTxt);
+        formatter.setNumericOnly(eleventhFeeTxt);
+        feesPanel.add(new JLabel("Fecha del importe"));
+        eleventhFeeDateTxt = new JTextField(10);
+        feesPanel.add(eleventhFeeDateTxt);
+
+        panel.add(feesPanel);
+    }
+
     private void createButtonsPanel() {
         generateButtom = new JButton("Generar factura");
         generateButtom.addActionListener(this);
@@ -442,6 +469,7 @@ public class core extends JFrame implements ActionListener {
         Map<String, Map<String, String>> eighthFeeMap = new HashMap<>();
         Map<String, Map<String, String>> ninethFeeMap = new HashMap<>();
         Map<String, Map<String, String>> tenthFeeMap = new HashMap<>();
+        Map<String, Map<String, String>> eleventhFeeMap = new HashMap<>();
         Map<Object, Object> finalData = new HashMap<>();
 
 
@@ -574,6 +602,17 @@ public class core extends JFrame implements ActionListener {
         } catch (NullPointerException ignore) {
         }
 
+        try {
+            if (!eleventhFeeComboBox.getSelectedItem().toString().equals("")) {
+                Map<String, String> eleventhFeeData = new HashMap<>();
+                eleventhFeeData.put("Razon: ", eleventhFeeComboBox.getSelectedItem().toString());
+                eleventhFeeData.put("Monto: ", eleventhFeeTxt.getText());
+                eleventhFeeData.put("Fecha: ", eleventhFeeDateTxt.getText());
+                eleventhFeeMap.put("ONCEAVO HONORARIO:", eleventhFeeData);
+            }
+        } catch (NullPointerException ignore) {
+        }
+
         finalData.putAll(receiptInfoMap);
 
         if (!firstFeeMap.isEmpty()) {
@@ -614,6 +653,10 @@ public class core extends JFrame implements ActionListener {
 
         if (!tenthFeeMap.isEmpty()) {
             finalData.putAll(tenthFeeMap);
+        }
+
+        if (!eleventhFeeMap.isEmpty()) {
+            finalData.putAll(eleventhFeeMap);
         }
 
         jsonHandler.writeOnFinalJson(finalData);
@@ -666,6 +709,8 @@ public class core extends JFrame implements ActionListener {
             ninethFeeDateTxt.setComponentPopupMenu(menu);
             tenthFeeTxt.setComponentPopupMenu(menu);
             tenthFeeDateTxt.setComponentPopupMenu(menu);
+            eleventhFeeTxt.setComponentPopupMenu(menu);
+            eleventhFeeDateTxt.setComponentPopupMenu(menu);
         }
 
     }

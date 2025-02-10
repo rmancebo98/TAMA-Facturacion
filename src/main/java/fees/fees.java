@@ -230,6 +230,12 @@ public class fees {
                 core.tenthFeeTxt.setText(format.formatAsMoney(core.tenthFeeTxt.getText()));
             }
         });
+        core.eleventhFeeTxt.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                core.eleventhFeeTxt.setText(format.formatAsMoney(core.eleventhFeeTxt.getText()));
+            }
+        });
     }
 
     public static JTextField fillFeeValueInCore(JComboBox<String> comboBox) {
@@ -322,6 +328,14 @@ public class fees {
                 core.tenthFeeTxt.setText(fees.getFeeAmount(core.tenthFeeComboBox.getSelectedItem().toString()));
             } else if (core.tenthFeeComboBox.getSelectedItem() == null) {
                 core.tenthFeeTxt.setText("");
+            }
+        });
+        core.eleventhFeeComboBox.addActionListener(e -> {
+            //Update fee value based on selection of feeComboBox
+            if (core.eleventhFeeComboBox.getSelectedItem() != null) {
+                core.eleventhFeeTxt.setText(fees.getFeeAmount(core.eleventhFeeComboBox.getSelectedItem().toString()));
+            } else if (core.eleventhFeeComboBox.getSelectedItem() == null) {
+                core.eleventhFeeTxt.setText("");
             }
         });
     }
@@ -429,6 +443,17 @@ public class fees {
                 core.tenthFeeDateTxt.setText("");
             }
         });
+        core.eleventhFeeComboBox.addActionListener(e -> {
+            if (core.eleventhFeeComboBox.getSelectedItem() == null) {
+                return;
+            }
+            if (core.eleventhFeeComboBox.getSelectedItem() != null && core.eleventhFeeDateTxt.getText().equals("")) {
+                core.eleventhFeeDateTxt.setText(date.today());
+            } else if (core.eleventhFeeComboBox.getSelectedItem().equals("")) {
+                core.eleventhFeeComboBox.setSelectedIndex(-1);
+                core.eleventhFeeDateTxt.setText("");
+            }
+        });
     }
 
     public static void updateFeesDropDownInCore() {
@@ -466,11 +491,16 @@ public class fees {
 
         int ninethFeeSelectedIndex = core.ninethFeeComboBox.getSelectedIndex();
         core.ninethFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.ninethFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
         core.ninethFeeComboBox.setSelectedIndex(ninethFeeSelectedIndex);
 
         int tenthFeeSelectedIndex = core.tenthFeeComboBox.getSelectedIndex();
         core.tenthFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
         core.tenthFeeComboBox.setSelectedIndex(tenthFeeSelectedIndex);
+
+        int eleventhFeeSelectedIndex = core.eleventhFeeComboBox.getSelectedIndex();
+        core.eleventhFeeComboBox.setModel(new DefaultComboBoxModel<>(fees.getAllKeysFromJson().toArray(new String[0])));
+        core.eleventhFeeComboBox.setSelectedIndex(eleventhFeeSelectedIndex);
     }
 
 }

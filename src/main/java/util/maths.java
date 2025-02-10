@@ -98,6 +98,11 @@ public class maths {
         if (tenthFee != null) {
             getAmountWithITBIS(tenthFee.get("Monto: "));
         }
+        Map<String, String> eleventhFee = receiptJson.get("ONCEAVO HONORARIO:");
+        if (eleventhFee != null) {
+            getAmountWithITBIS(eleventhFee.get("Monto: "));
+        }
+
         return sumAllValues(amountWithITBIS);
     }
 }

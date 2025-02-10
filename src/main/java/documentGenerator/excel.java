@@ -42,9 +42,9 @@ public class excel {
 
 
         continueFromExisting =
-                JOptionPane.showConfirmDialog(null, "Desea continuar con una factura existente?"
+                JOptionPane.showConfirmDialog(null, "Desea continuar con un excel existente?"
                         , "Continuar con factura existente?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-
+        notifications.showPopUpNotification("Seleccione el destino del excel", "Seleccione el destino del excel");
         if (continueFromExisting == JOptionPane.YES_OPTION) {
             JFileChooser existingFileChooser = new JFileChooser();
             int choice = existingFileChooser.showSaveDialog(null);
